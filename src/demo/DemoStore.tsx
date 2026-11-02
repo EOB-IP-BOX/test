@@ -7,6 +7,7 @@ import {
   useState,
   type ReactNode,
 } from 'react'
+import { resolveConciergeReplyRoute } from './conciergeStatus'
 import { conciergeStubReply } from './conciergeStub'
 import { evaluatePackAccess, type PackAccessResult } from './packAccess'
 import { createInitialDemoState } from './seed'
@@ -15,18 +16,45 @@ import type { DemoState, GrantStatus, OeCase, OeRequest, StepUpChallenge } from 
 export const DEMO_HUB_STORAGE_KEY = 'letzz_demo_hub_state_v1'
 const STORAGE_KEY = DEMO_HUB_STORAGE_KEY
 
+type LegacySettings = DemoState['settings'] & { localConcierge?: boolean }
+
+function normalizeSettings(
+  raw: LegacySettings | undefined,
+  seed: DemoState['settings'],
+): DemoState['settings'] {
+  if (!raw) return seed
+  const stub =
+    typeof raw.localConciergeStub === 'boolean'
+      ? raw.localConciergeStub
+      : typeof raw.localConcierge === 'boolean'
+        ? raw.localConcierge
+        : seed.localConciergeStub
+  return {
+    demoMode: raw.demoMode ?? seed.demoMode,
+    localConciergeStub: stub,
+    serverConciergeHeavy: raw.serverConciergeHeavy ?? seed.serverConciergeHeavy,
+    notifications: raw.notifications ?? seed.notifications,
+    debugLoopback: raw.debugLoopback ?? seed.debugLoopback,
+  }
+}
+
+function mergeParsedDemoState(parsed: DemoState): DemoState {
+  const seed = createInitialDemoState()
+  return {
+    ...seed,
+    ...parsed,
+    stepUpChallenges: parsed.stepUpChallenges ?? [],
+    lifeStoreSources: parsed.lifeStoreSources ?? seed.lifeStoreSources,
+    settings: normalizeSettings(parsed.settings as LegacySettings, seed.settings),
+  }
+}
+
 function loadState(): DemoState {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw) {
       const parsed = JSON.parse(raw) as DemoState
-      const seed = createInitialDemoState()
-      return {
-        ...seed,
-        ...parsed,
-        stepUpChallenges: parsed.stepUpChallenges ?? [],
-        lifeStoreSources: parsed.lifeStoreSources ?? seed.lifeStoreSources,
-      }
+      return mergeParsedDemoState(parsed)
     }
   } catch {
     /* use seed */
@@ -74,13 +102,7 @@ const DemoStoreContext = createContext<DemoStoreValue | null>(null)
 function mergeStoredState(raw: string): DemoState | null {
   try {
     const parsed = JSON.parse(raw) as DemoState
-    const seed = createInitialDemoState()
-    return {
-      ...seed,
-      ...parsed,
-      stepUpChallenges: parsed.stepUpChallenges ?? [],
-      lifeStoreSources: parsed.lifeStoreSources ?? seed.lifeStoreSources,
-    }
+    return mergeParsedDemoState(parsed)
   } catch {
     return null
   }
@@ -255,23 +277,9 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
   const appendAssistant = useCallback(
     (text: string) => {
       commit((prev) => {
-        if (!prev.settings.localConcierge) {
-          return {
-            ...prev,
-            assistantThread: [
-              ...prev.assistantThread,
-              { id: `u-${Date.now()}`, role: 'user', text },
-              {
-                id: `a-${Date.now()}`,
-                role: 'assistant',
-                text:
-                  'DEMO Concierge (degraded, code server_unreachable): localConcierge is off in Settings. ' +
-                  'Heavy server models are not called in this hub. Re-enable localConcierge for the rule-based stub.',
-              },
-            ],
-          }
-        }
-        const reply = conciergeStubReply(text, prev)
+        const route = resolveConciergeReplyRoute(text, prev.settings)
+        const replyText =
+          route.kind === 'stub' ? conciergeStubReply(text, prev) : route.message
         return {
           ...prev,
           assistantThread: [
@@ -280,7 +288,7 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
             {
               id: `a-${Date.now()}`,
               role: 'assistant',
-              text: reply,
+              text: replyText,
             },
           ],
         }

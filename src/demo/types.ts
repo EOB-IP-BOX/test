@@ -116,7 +116,10 @@ export type DemoState = {
   assistantThread: AssistantMessage[]
   settings: {
     demoMode: boolean
-    localConcierge: boolean
+    /** Rule-based on-device stub (no GPT). */
+    localConciergeStub: boolean
+    /** Simulated paywalled / server heavy path (never fakes completion in this hub). */
+    serverConciergeHeavy: boolean
     notifications: boolean
     debugLoopback: boolean
   }

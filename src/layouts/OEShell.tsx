@@ -14,10 +14,14 @@ export function OEShell() {
   return (
     <>
       <DemoBanner />
-      <div className="shell">
+      <div className="shell" data-testid="oe-shell">
         <nav className="shell-nav" aria-label="Obliged Entity operate desk">
-          <div style={{ padding: '0 0.65rem 0.75rem', fontWeight: 600, color: 'var(--lz-accent)' }}>
-            LETZZ Platform (OE)
+          <div className="shell-product-mark">
+            <span className="shell-product-mark-fold" aria-hidden />
+            <div>
+              <div className="shell-product-mark-title">LETZZ Platform</div>
+              <div className="shell-product-mark-sub">Obliged Entity operate desk</div>
+            </div>
           </div>
           {links.map((l) => (
             <NavLink key={l.to} to={l.to} className={({ isActive }) => (isActive ? 'active' : '')}>

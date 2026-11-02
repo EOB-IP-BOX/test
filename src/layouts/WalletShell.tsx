@@ -15,10 +15,14 @@ export function WalletShell() {
   return (
     <>
       <DemoBanner />
-      <div className="shell">
+      <div className="shell" data-testid="wallet-shell">
         <nav className="shell-nav" aria-label="Wallet Subject desk">
-          <div style={{ padding: '0 0.65rem 0.75rem', fontWeight: 600, color: 'var(--lz-accent)' }}>
-            LETZZ Wallet Subject
+          <div className="shell-product-mark">
+            <span className="shell-product-mark-fold" aria-hidden />
+            <div>
+              <div className="shell-product-mark-title">LETZZ Wallet Subject</div>
+              <div className="shell-product-mark-sub">Hash-only demo desk</div>
+            </div>
           </div>
           {links.map((l) => (
             <NavLink key={l.to} to={l.to} className={({ isActive }) => (isActive ? 'active' : '')}>

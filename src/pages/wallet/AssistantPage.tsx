@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { DemoPill } from '../../components/StatusBadge'
+import { conciergeBannerCodes } from '../../demo/conciergeStatus'
 import { useDemoStore } from '../../demo/DemoStore'
 
 const QUICK_PROMPTS = [
@@ -9,10 +10,29 @@ const QUICK_PROMPTS = [
   'Explain step-up and WebAuthn in this hub',
 ]
 
+const BANNER_COPY: Record<
+  ReturnType<typeof conciergeBannerCodes>[number],
+  { title: string; body: string }
+> = {
+  local_degraded: {
+    title: 'Concierge local degraded',
+    body: 'Code local_degraded: localConciergeStub is off. Rule-based replies are disabled until you re-enable the stub in Settings.',
+  },
+  paywall_required: {
+    title: 'Server heavy paywall',
+    body: 'Code paywall_required: serverConciergeHeavy is on. Paywalled GPT/Claude-class jobs stay gated in this hub; no simulated subscription unlock.',
+  },
+  server_unreachable: {
+    title: 'Server unreachable',
+    body: 'Code server_unreachable: heavy server path is not wired on GitHub Pages. Prompts that request GPT/Claude-class work return this code instead of fake answers.',
+  },
+}
+
 export function AssistantPage() {
   const { state, appendAssistant } = useDemoStore()
   const [draft, setDraft] = useState('')
-  const conciergeDegraded = !state.settings.localConcierge
+  const bannerCodes = conciergeBannerCodes(state.settings)
+  const stubActive = state.settings.localConciergeStub
 
   function onSend(e: FormEvent) {
     e.preventDefault()
@@ -31,26 +51,36 @@ export function AssistantPage() {
       <p className="page-sub">
         Wallet-only assistant simulation <DemoPill />
       </p>
-      {conciergeDegraded ? (
-        <div
-          className="demo-banner"
-          role="status"
-          data-testid="concierge-degraded-banner"
-          style={{ marginBottom: '1rem' }}
-        >
-          <strong>Concierge degraded</strong>
-          <p style={{ margin: '0.35rem 0 0' }}>
-            Code <code>server_unreachable</code>: localConcierge is off in Settings. Heavy GPT/Claude
-            server path is not wired on GitHub Pages. Re-enable localConcierge for the rule-based
-            local stub, or expect degraded replies only.
-          </p>
-        </div>
-      ) : (
+      {bannerCodes.map((code) => {
+        if (code === 'server_unreachable') return null
+        const copy = BANNER_COPY[code]
+        return (
+          <div
+            key={code}
+            className="demo-banner concierge-status-banner"
+            role="status"
+            data-testid={`concierge-banner-${code}`}
+            style={{ marginBottom: '0.75rem', textAlign: 'left' }}
+          >
+            <strong>{copy.title}</strong>
+            <p style={{ margin: '0.35rem 0 0' }}>
+              {copy.body}
+            </p>
+          </div>
+        )
+      })}
+      {stubActive && !state.settings.serverConciergeHeavy ? (
         <p className="honesty">
           Non-generative local stub only: fixed replies from demo state and help text. No paywalled
           server model, no invented compliance outcomes, no document send.
         </p>
-      )}
+      ) : null}
+      {stubActive && state.settings.serverConciergeHeavy ? (
+        <p className="honesty" data-testid="concierge-hybrid-honesty">
+          Hybrid mode: local stub for ordinary prompts. Messages that request GPT/Claude-class heavy
+          work return code server_unreachable (never fake completion).
+        </p>
+      ) : null}
       <div className="panel" data-testid="wallet-assistant-panel">
         <div className="chat-thread" data-testid="wallet-assistant-thread">
           {state.assistantThread.map((m) => (
@@ -82,7 +112,7 @@ export function AssistantPage() {
             />
           </div>
           <button type="submit" className="btn btn-primary">
-            {conciergeDegraded ? 'Send (degraded path)' : 'Send (local stub)'}
+            {stubActive ? 'Send (local stub path)' : 'Send (gated path)'}
           </button>
         </form>
       </div>

@@ -294,7 +294,8 @@ export function createInitialDemoState(): DemoState {
     assistantThread,
     settings: {
       demoMode: true,
-      localConcierge: true,
+      localConciergeStub: true,
+      serverConciergeHeavy: false,
       notifications: true,
       debugLoopback: true,
     },

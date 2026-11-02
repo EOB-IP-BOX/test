@@ -85,7 +85,7 @@ Screenshots are off by default (Pages can be flaky); traces on first retry only.
 - Request compose, draft, mark sent
 - Grants approve/deny (shared state with wallet)
 - **Grants pack flow (Prometheus honesty sim):** View pack on a granted row → step-up gate (`STEP_UP_DENIED`) → Wallet Subject Home → Approve (loopback) → pack preview (auto-retry when demo state syncs across tabs via `storage`, or manual Retry). **Path B:** Run WebAuthn probe on the gate → `webauthn_unavailable` or `webauthn_verify_not_wired` (never unlocks). Revoke before or after step-up → `GRANT_REVOKED` (not stale step-up denial). Pre-seeded revoked row: DEMO Elon Musk grant-4.
-- **Cases pack preview:** Case detail links a grant id; **View case pack** reuses the same step-up gate (e.g. case-008 → grant-3).
+- **Cases pack preview:** Case detail and Cases list **View pack** (when grant is granted/revoked) reuse the same step-up gate (e.g. case-008 → grant-3).
 - **Follow-up request wizard (stub):** OE Requests desk, multi-step DEMO wizard (no send pipeline).
 - Subject search
 
@@ -94,7 +94,6 @@ State persists in `localStorage` for the browser session; gate uses `sessionStor
 ## Backlog (honest gaps)
 
 - Wire manifest copy to real Platform API grant payload shape (still hash-only).
-- Cases list row quick action for pack preview (detail page only today).
 - Life-store: real connector states (indexing progress) and cross-tab sync with OE subject views.
-- Visual parity pass against LETZZ Wallet Subject web tokens (Notify Blue / UBI crimson).
-- Concierge: separate toggle for simulated paywalled server vs local stub (today one localConcierge flag).
+- Self-hosted IBM Plex on GitHub Pages base path audit (font URLs vs `base` in vite.config).
+- Concierge: subscription / entitlement UI before any real server heavy wiring.

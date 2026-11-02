@@ -1,5 +1,5 @@
-import { Link, useParams } from 'react-router-dom'
-import { useCallback, useEffect, useState } from 'react'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { GrantPackStepUpGate } from '../../components/GrantPackStepUpGate'
 import { DemoPill } from '../../components/StatusBadge'
 import { describePackFailure, type PackAccessFailure } from '../../demo/packAccess'
@@ -8,6 +8,7 @@ import type { OeCase } from '../../demo/types'
 
 export function CaseDetailPage() {
   const { id } = useParams()
+  const [searchParams] = useSearchParams()
   const {
     state,
     updateCaseStatus,
@@ -66,7 +67,7 @@ export function CaseDetailPage() {
     applyPackResult(gateGrantId, result, gateChallengeId)
   }, [state.stepUpChallenges, gateGrantId, gateChallengeId, tryPackPreview, applyPackResult])
 
-  function onViewCasePack() {
+  const onViewCasePack = useCallback(() => {
     if (!linkedGrant) return
     setPackBusy(true)
     try {
@@ -76,7 +77,21 @@ export function CaseDetailPage() {
     } finally {
       setPackBusy(false)
     }
-  }
+  }, [linkedGrant, ensureStepUpChallenge, tryPackPreview, applyPackResult])
+
+  const viewPackHandled = useRef(false)
+  useEffect(() => {
+    viewPackHandled.current = false
+  }, [id])
+
+  useEffect(() => {
+    if (searchParams.get('viewPack') !== '1') return
+    if (viewPackHandled.current) return
+    if (!linkedGrant) return
+    if (linkedGrant.status !== 'granted' && linkedGrant.status !== 'revoked') return
+    viewPackHandled.current = true
+    onViewCasePack()
+  }, [searchParams, linkedGrant, onViewCasePack])
 
   function onRetryPack() {
     if (!gateGrantId || !gateChallengeId) return

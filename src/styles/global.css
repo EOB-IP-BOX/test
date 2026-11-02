@@ -1,9 +1,47 @@
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/test/fonts/IBMPlexSans-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/test/fonts/IBMPlexSans-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/test/fonts/IBMPlexSans-SemiBold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/test/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+}
+
 :root {
   --lz-bg: #f7f7f8;
+  --lz-bg-deep: #eeeff1;
   --lz-surface: #ffffff;
   --lz-surface-muted: #f0f0f2;
+  --lz-surface-inset: #f3f3f5;
   --lz-text: #1a1a1c;
+  --lz-text-secondary: #2f2f31;
   --lz-muted: #6e6e73;
+  --lz-silver: #6e6e73;
+  --lz-silver-light: #e9eaec;
+  --lz-silver-metal: #c4c4c8;
   --lz-accent: #8c1e2d;
   --lz-accent-pressed: #681421;
   --lz-info: #3d6b99;
@@ -11,10 +49,13 @@
   --lz-warning: #b45309;
   --lz-danger: #991b1b;
   --lz-border: #e4e4e7;
+  --lz-border-strong: #c7c7cc;
   --lz-focus: #3d6b99;
   --lz-on-accent: #ffffff;
-  --lz-font-sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --lz-font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --lz-nav-active-bg: #ffffff;
+  --lz-nav-active-text: #1a1a1c;
+  --lz-font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --lz-font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   --lz-radius-md: 10px;
   --lz-radius-lg: 14px;
   --lz-shadow: 0 1px 3px rgba(26, 26, 28, 0.08);
@@ -46,6 +87,15 @@ a {
   text-decoration: none;
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--lz-focus);
+  outline-offset: 2px;
+}
+
 a:hover {
   text-decoration: underline;
 }
@@ -55,11 +105,16 @@ button {
 }
 
 .demo-banner {
-  background: linear-gradient(90deg, #3d6b99 0%, #8c1e2d 100%);
+  background: linear-gradient(90deg, var(--lz-info) 0%, var(--lz-accent) 100%);
   color: var(--lz-on-accent);
   padding: 0.5rem 1rem;
   font-size: 0.75rem;
   text-align: center;
+}
+
+.concierge-status-banner {
+  border-radius: var(--lz-radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .demo-banner strong {
@@ -184,7 +239,7 @@ button {
 }
 
 .shell-nav {
-  background: var(--lz-surface);
+  background: var(--lz-bg-deep);
   border-right: 1px solid var(--lz-border);
   padding: 1rem 0.75rem;
   display: flex;
@@ -192,17 +247,50 @@ button {
   gap: 0.25rem;
 }
 
-.shell-nav a {
-  padding: 0.45rem 0.65rem;
-  border-radius: var(--lz-radius-md);
+.shell-product-mark {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.65rem 0.85rem;
+  margin-bottom: 0.25rem;
+  border-bottom: 1px solid var(--lz-border);
+}
+
+.shell-product-mark-fold {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: linear-gradient(135deg, var(--lz-accent) 50%, var(--lz-silver-metal) 50%);
+  flex-shrink: 0;
+}
+
+.shell-product-mark-title {
+  font-weight: 600;
+  font-size: 0.8125rem;
   color: var(--lz-text);
-  text-decoration: none;
+  line-height: 1.25;
+}
+
+.shell-product-mark-sub {
+  font-size: 0.6875rem;
+  color: var(--lz-muted);
   font-weight: 500;
 }
 
+.shell-nav a {
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--lz-radius-md);
+  color: var(--lz-text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+}
+
 .shell-nav a.active {
-  background: var(--lz-surface-muted);
-  color: var(--lz-accent);
+  background: var(--lz-nav-active-bg);
+  color: var(--lz-nav-active-text);
+  border-left-color: var(--lz-info);
+  box-shadow: var(--lz-shadow);
 }
 
 .shell-main {
@@ -213,6 +301,8 @@ button {
 .page-title {
   margin: 0 0 0.25rem;
   font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 .page-sub {

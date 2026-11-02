@@ -16,13 +16,31 @@ test.describe('LETZZ test hub Data Subject, Concierge, case pack', () => {
     await expect(page.getByTestId('data-subject-byte-gate')).toContainText(/platform_vault_bytes_blocked|vault bytes/i)
   })
 
-  test('Concierge degraded banner when localConcierge off', async ({ page }) => {
+  test('Concierge local_degraded when local stub off', async ({ page }) => {
     await enterDemoHub(page, '/wallet/settings')
-    await page.getByLabel('localConcierge').uncheck()
+    await page.getByLabel('Local Concierge stub (rule-based, no GPT)').uncheck()
     await page.goto('#/wallet/assistant')
-    await expect(page.getByTestId('concierge-degraded-banner')).toContainText(/server_unreachable|degraded/i)
+    await expect(page.getByTestId('concierge-banner-local_degraded')).toContainText(/local_degraded/i)
     await page.getByRole('button', { name: 'Summarize pending grants' }).click()
-    await expect(page.getByTestId('wallet-assistant-thread')).toContainText(/server_unreachable|degraded/i)
+    await expect(page.getByTestId('wallet-assistant-thread')).toContainText(/local_degraded/i)
+  })
+
+  test('Concierge paywall_required and server_unreachable for heavy prompt', async ({ page }) => {
+    await enterDemoHub(page, '/wallet/settings')
+    await page.getByLabel('Simulated paywalled server heavy (honest gates only)').check()
+    await page.goto('#/wallet/assistant')
+    await expect(page.getByTestId('concierge-banner-paywall_required')).toContainText(/paywall_required/i)
+
+    await page.getByLabel('Message Concierge (DEMO)').fill('Run a GPT heavy analysis on my vault')
+    await page.getByRole('button', { name: /Send/i }).click()
+    await expect(page.getByTestId('wallet-assistant-thread')).toContainText(/server_unreachable/i)
+  })
+
+  test('OE cases list View pack deep-links to case pack gate', async ({ page }) => {
+    await enterDemoHub(page, '/oe/cases')
+    await expect(page.getByTestId('oe-cases-list')).toBeVisible()
+    await page.getByTestId('case-list-view-pack-case-008').click()
+    await expect(page.getByTestId('grant-pack-step-up-gate')).toBeVisible()
   })
 
   test('OE case detail View case pack after grant approve and step-up', async ({ page }) => {
