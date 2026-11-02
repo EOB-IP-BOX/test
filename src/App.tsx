@@ -20,12 +20,16 @@ import { HomePage } from './pages/wallet/HomePage'
 import { PackagesPage } from './pages/wallet/PackagesPage'
 import { SettingsPage } from './pages/wallet/SettingsPage'
 import { WelcomePage } from './pages/wallet/WelcomePage'
+import { GuestShareOpenPage } from './pages/GuestShareOpenPage'
+import { GuestShareRegisterPage } from './pages/GuestShareRegisterPage'
 
 function AuthedRoutes() {
   return (
     <RequireAuth>
       <Routes>
         <Route path="/choose" element={<Chooser />} />
+        <Route path="/guest/:token" element={<GuestShareOpenPage />} />
+        <Route path="/register" element={<GuestShareRegisterPage />} />
         <Route path="/wallet" element={<WalletShell />}>
           <Route path="welcome" element={<WelcomePage />} />
           <Route path="home" element={<HomePage />} />

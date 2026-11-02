@@ -43,6 +43,8 @@ npm run build
 
 **Data Subject, Concierge degraded, case pack:** life-store grant sim, `concierge-degraded-banner`, case `case-pack-preview`.
 
+**Guest share honesty (Codex 4.3):** static open desk at `#/guest/demo-hub-guest-share`, hash-metadata list, **Check download availability** → `download_not_available` (no fake PDF), `#/register?from=guest-share` registration gate.
+
 Hooks include `wallet-documents-list`, `wallet-document-detail`, `wallet-package-create`, `wallet-package-assembler`, `wallet-package-manifest-preview`, `wallet-assistant-thread`, plus grant pack ids above.
 
 Post-deploy: `deploy-pages.yml` runs `smoke-pages` against live Pages URL after deploy succeeds.
@@ -89,10 +91,17 @@ Screenshots are off by default (Pages can be flaky); traces on first retry only.
 - **Follow-up request wizard (stub):** OE Requests desk, multi-step DEMO wizard (no send pipeline).
 - Subject search
 
+### Guest share (unauthenticated desk sim)
+
+- Open `#/guest/demo-hub-guest-share` after Alma gate: one-time share copy, hash-metadata document row, download check honesty
+- Register invite `#/register?from=guest-share`: no Cognito / instant wallet claims
+- Parity target: Local Cloud `e2e/guest-share-honesty.spec.ts` (Platform API); hub uses static demo token only
+
 State persists in `localStorage` for the browser session; gate uses `sessionStorage`. Chooser writes `letzz.debug.localAccount` (`Wallet Subject` or `Analyst`) like the local Platform web desk.
 
 ## Backlog (honest gaps)
 
+- Guest share: optional link from OE Requests desk to generate/copy demo token (still static, not API-backed).
 - Wire manifest copy to real Platform API grant payload shape (still hash-only).
 - Life-store: real connector states (indexing progress) and cross-tab sync with OE subject views.
 - Self-hosted IBM Plex via Vite-bundled `src/assets/fonts` (CSS `url()` rewrites for `/test/` on Pages).
