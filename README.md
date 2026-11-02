@@ -35,6 +35,27 @@ Build for Pages (base path `/test/`):
 npm run build
 ```
 
+## Playwright smoke (grant pack honesty)
+
+Exercises password gate, OE Grants step-up gate, Path B WebAuthn probe, Wallet loopback approve, and `GRANT_REVOKED` ordering. Uses hub `data-testid` hooks (`grant-pack-step-up-gate`, `grant-pack-path-b-probe`, `webauthn-probe-*`, `wallet-step-up-inbox`, `grant-pack-preview`, `grant-pack-error`).
+
+```bash
+npm install
+npx playwright install chromium
+npm run test:e2e:pages
+```
+
+Default base URL: `https://eob-ip-box.github.io/test/` (override with `PLAYWRIGHT_BASE_URL`).
+
+Local preview (build first, or rely on webServer in config):
+
+```bash
+npm run build
+npm run test:e2e:local
+```
+
+Screenshots are off by default (Pages can be flaky); traces on first retry only.
+
 ## Flows exercised
 
 ### Wallet Subject
