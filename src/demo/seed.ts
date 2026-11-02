@@ -188,6 +188,7 @@ export function createInitialDemoState(): DemoState {
       status: 'review' as const,
       assignee: 'DEMO: Nick Product Owner',
       updatedAt: '2026-11-02T06:30:00Z',
+      linkedGrantId: 'grant-1',
     },
     {
       id: 'case-022',
@@ -196,6 +197,7 @@ export function createInitialDemoState(): DemoState {
       status: 'open' as const,
       assignee: 'DEMO: Thierry CTO',
       updatedAt: '2026-11-01T16:00:00Z',
+      linkedGrantId: 'grant-5',
     },
     {
       id: 'case-008',
@@ -204,6 +206,7 @@ export function createInitialDemoState(): DemoState {
       status: 'closed' as const,
       assignee: 'DEMO: Mauro CFO',
       updatedAt: '2026-10-20T11:00:00Z',
+      linkedGrantId: 'grant-3',
     },
   ]
 
@@ -222,6 +225,41 @@ export function createInitialDemoState(): DemoState {
     { id: 'ds-1', label: 'Home address (DEMO)', source: 'Local index', readOnly: true },
     { id: 'ds-2', label: 'Employment timeline (DEMO: EOB Cap)', source: 'User-controlled store', readOnly: true },
     { id: 'ds-3', label: 'Grant history export (DEMO)', source: 'Derived from grants table', readOnly: true },
+  ]
+
+  const lifeStoreSources = [
+    {
+      id: 'life-vault',
+      label: 'Device vault index (DEMO)',
+      connector: 'letzwallet_local_vault',
+      status: 'ready' as const,
+      linkedDocumentIds: ['doc-passport-bond', 'doc-utility-cruise', 'doc-id-eob'],
+      readOnlyGrantOe: null,
+    },
+    {
+      id: 'life-calendar',
+      label: 'Calendar excerpts (DEMO stub)',
+      connector: 'on_device_calendar_stub',
+      status: 'ready' as const,
+      linkedDocumentIds: [],
+      readOnlyGrantOe: 'Lux Compliance Demo OE',
+    },
+    {
+      id: 'life-cloud',
+      label: 'Cloud drive folder (DEMO: not configured)',
+      connector: 'cloud_connector_stub',
+      status: 'not_configured' as const,
+      linkedDocumentIds: [],
+      readOnlyGrantOe: null,
+    },
+    {
+      id: 'life-grants-derived',
+      label: 'Grant-to-source map (derived)',
+      connector: 'local_derived_index',
+      status: 'ready' as const,
+      linkedDocumentIds: ['doc-bank-oprah', 'doc-contract-swift'],
+      readOnlyGrantOe: null,
+    },
   ]
 
   const assistantThread = [
@@ -252,6 +290,7 @@ export function createInitialDemoState(): DemoState {
     cases,
     requests,
     dataSubjectRows,
+    lifeStoreSources,
     assistantThread,
     settings: {
       demoMode: true,

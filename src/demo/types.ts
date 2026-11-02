@@ -62,6 +62,8 @@ export type OeCase = {
   status: 'open' | 'review' | 'closed'
   assignee: string
   updatedAt: string
+  /** Optional grant whose hash-only pack preview matches this case file. */
+  linkedGrantId?: string
 }
 
 export type OeRequest = {
@@ -71,6 +73,20 @@ export type OeRequest = {
   message: string
   status: 'draft' | 'sent'
   createdAt: string
+}
+
+export type LifeStoreSourceStatus = 'not_configured' | 'indexing' | 'ready' | 'denied'
+
+/** Codex 4.4: locally indexed life-store connector (device index; no Platform vault bytes). */
+export type LifeStoreSource = {
+  id: string
+  label: string
+  connector: string
+  status: LifeStoreSourceStatus
+  /** Document ids indexed from device vault (hash references only in this hub). */
+  linkedDocumentIds: string[]
+  /** Simulated read-only grant to an OE desk (consent distinct from delivery). */
+  readOnlyGrantOe: string | null
 }
 
 export type DataSubjectRecord = {
@@ -96,6 +112,7 @@ export type DemoState = {
   cases: OeCase[]
   requests: OeRequest[]
   dataSubjectRows: DataSubjectRecord[]
+  lifeStoreSources: LifeStoreSource[]
   assistantThread: AssistantMessage[]
   settings: {
     demoMode: boolean

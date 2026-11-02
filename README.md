@@ -41,6 +41,8 @@ npm run build
 
 **Documents and Packages:** inspect/verify hash, blocked download, draft pack assembly, manifest copy, Assistant stub.
 
+**Data Subject, Concierge degraded, case pack:** life-store grant sim, `concierge-degraded-banner`, case `case-pack-preview`.
+
 Hooks include `wallet-documents-list`, `wallet-document-detail`, `wallet-package-create`, `wallet-package-assembler`, `wallet-package-manifest-preview`, `wallet-assistant-thread`, plus grant pack ids above.
 
 Post-deploy: `deploy-pages.yml` runs `smoke-pages` against live Pages URL after deploy succeeds.
@@ -72,7 +74,7 @@ Screenshots are off by default (Pages can be flaky); traces on first retry only.
 - Documents: category filter, inspect detail, copy hash, verify-only paste check, blocked PDF download honesty
 - Packages: create draft, checkbox assemble hashes, mark ready, mark shared, copy JSON manifest (`vaultBytesIncluded: false`)
 - Assistant: quick prompts + rule-based local stub (no GPT, reads demo state only)
-- Data Subject index
+- Data Subject: life-store connectors, read-only grant simulation, vault-byte gate honesty
 - Settings toggles + reset demo data
 
 ### Obliged Entity
@@ -83,6 +85,7 @@ Screenshots are off by default (Pages can be flaky); traces on first retry only.
 - Request compose, draft, mark sent
 - Grants approve/deny (shared state with wallet)
 - **Grants pack flow (Prometheus honesty sim):** View pack on a granted row → step-up gate (`STEP_UP_DENIED`) → Wallet Subject Home → Approve (loopback) → pack preview (auto-retry when demo state syncs across tabs via `storage`, or manual Retry). **Path B:** Run WebAuthn probe on the gate → `webauthn_unavailable` or `webauthn_verify_not_wired` (never unlocks). Revoke before or after step-up → `GRANT_REVOKED` (not stale step-up denial). Pre-seeded revoked row: DEMO Elon Musk grant-4.
+- **Cases pack preview:** Case detail links a grant id; **View case pack** reuses the same step-up gate (e.g. case-008 → grant-3).
 - **Follow-up request wizard (stub):** OE Requests desk, multi-step DEMO wizard (no send pipeline).
 - Subject search
 
@@ -91,7 +94,7 @@ State persists in `localStorage` for the browser session; gate uses `sessionStor
 ## Backlog (honest gaps)
 
 - Wire manifest copy to real Platform API grant payload shape (still hash-only).
-- OE Cases desk: pack preview from case row (not only Grants).
-- Data Subject tab: interactive grant-to-source simulation with read-only enforcement.
+- Cases list row quick action for pack preview (detail page only today).
+- Life-store: real connector states (indexing progress) and cross-tab sync with OE subject views.
 - Visual parity pass against LETZZ Wallet Subject web tokens (Notify Blue / UBI crimson).
-- Optional: Concierge degraded mode banner when `localConcierge` setting off.
+- Concierge: separate toggle for simulated paywalled server vs local stub (today one localConcierge flag).

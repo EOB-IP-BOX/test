@@ -20,7 +20,13 @@ function loadState(): DemoState {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw) {
       const parsed = JSON.parse(raw) as DemoState
-      return { ...createInitialDemoState(), ...parsed, stepUpChallenges: parsed.stepUpChallenges ?? [] }
+      const seed = createInitialDemoState()
+      return {
+        ...seed,
+        ...parsed,
+        stepUpChallenges: parsed.stepUpChallenges ?? [],
+        lifeStoreSources: parsed.lifeStoreSources ?? seed.lifeStoreSources,
+      }
     }
   } catch {
     /* use seed */
@@ -59,6 +65,8 @@ type DemoStoreValue = {
   approveStepUpChallenge: (challengeId: string) => void
   getLatestChallengeForGrant: (grantId: string) => StepUpChallenge | undefined
   tryPackPreview: (grantId: string, challenge?: StepUpChallenge | string) => PackAccessResult
+  grantLifeStoreReadOnly: (sourceId: string, oeName: string) => void
+  revokeLifeStoreGrant: (sourceId: string) => void
 }
 
 const DemoStoreContext = createContext<DemoStoreValue | null>(null)
@@ -66,7 +74,13 @@ const DemoStoreContext = createContext<DemoStoreValue | null>(null)
 function mergeStoredState(raw: string): DemoState | null {
   try {
     const parsed = JSON.parse(raw) as DemoState
-    return { ...createInitialDemoState(), ...parsed, stepUpChallenges: parsed.stepUpChallenges ?? [] }
+    const seed = createInitialDemoState()
+    return {
+      ...seed,
+      ...parsed,
+      stepUpChallenges: parsed.stepUpChallenges ?? [],
+      lifeStoreSources: parsed.lifeStoreSources ?? seed.lifeStoreSources,
+    }
   } catch {
     return null
   }
@@ -241,6 +255,22 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
   const appendAssistant = useCallback(
     (text: string) => {
       commit((prev) => {
+        if (!prev.settings.localConcierge) {
+          return {
+            ...prev,
+            assistantThread: [
+              ...prev.assistantThread,
+              { id: `u-${Date.now()}`, role: 'user', text },
+              {
+                id: `a-${Date.now()}`,
+                role: 'assistant',
+                text:
+                  'DEMO Concierge (degraded, code server_unreachable): localConcierge is off in Settings. ' +
+                  'Heavy server models are not called in this hub. Re-enable localConcierge for the rule-based stub.',
+              },
+            ],
+          }
+        }
         const reply = conciergeStubReply(text, prev)
         return {
           ...prev,
@@ -255,6 +285,32 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
           ],
         }
       })
+    },
+    [commit],
+  )
+
+  const grantLifeStoreReadOnly = useCallback(
+    (sourceId: string, oeName: string) => {
+      commit((prev) => ({
+        ...prev,
+        lifeStoreSources: prev.lifeStoreSources.map((s) =>
+          s.id === sourceId && s.status === 'ready'
+            ? { ...s, readOnlyGrantOe: oeName.trim() || 'Demo OE' }
+            : s,
+        ),
+      }))
+    },
+    [commit],
+  )
+
+  const revokeLifeStoreGrant = useCallback(
+    (sourceId: string) => {
+      commit((prev) => ({
+        ...prev,
+        lifeStoreSources: prev.lifeStoreSources.map((s) =>
+          s.id === sourceId ? { ...s, readOnlyGrantOe: null } : s,
+        ),
+      }))
     },
     [commit],
   )
@@ -366,6 +422,8 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
       approveStepUpChallenge,
       getLatestChallengeForGrant,
       tryPackPreview,
+      grantLifeStoreReadOnly,
+      revokeLifeStoreGrant,
     }),
     [
       state,
@@ -386,6 +444,8 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
       approveStepUpChallenge,
       getLatestChallengeForGrant,
       tryPackPreview,
+      grantLifeStoreReadOnly,
+      revokeLifeStoreGrant,
     ],
   )
 
