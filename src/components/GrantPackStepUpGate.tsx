@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { PackAccessFailure } from '../demo/packAccess'
+import { probeWebAuthnPathB, type WebAuthnProbeResult } from '../demo/webauthnProbe'
 
 type Props = {
   grantId: string
@@ -11,6 +13,18 @@ type Props = {
 
 /** Honest staff-facing gate when grant pack (view_full) needs approved step-up. */
 export function GrantPackStepUpGate({ grantId, challengeId, failure, onRetry, retrying }: Props) {
+  const [pathBProbe, setPathBProbe] = useState<WebAuthnProbeResult | null>(null)
+  const [pathBBusy, setPathBBusy] = useState(false)
+
+  async function onProbePathB() {
+    setPathBBusy(true)
+    try {
+      setPathBProbe(await probeWebAuthnPathB())
+    } finally {
+      setPathBBusy(false)
+    }
+  }
+
   return (
     <section
       className="panel honesty"
@@ -44,6 +58,32 @@ export function GrantPackStepUpGate({ grantId, challengeId, failure, onRetry, re
         <Link to="/wallet/home" className="btn btn-secondary" style={{ textDecoration: 'none' }}>
           Open Wallet step-up inbox
         </Link>
+      </div>
+
+      <div
+        style={{ marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid var(--lz-border, #ddd)' }}
+        data-testid="grant-pack-path-b-probe"
+      >
+        <h4 style={{ margin: '0 0 0.35rem', fontSize: '0.875rem' }}>Path B: WebAuthn probe (stub)</h4>
+        <p style={{ margin: 0, fontSize: '0.8125rem', color: 'var(--lz-muted)' }}>
+          Reports browser capability and wiring honesty. Never unlocks the pack in this hub.
+        </p>
+        <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+          <button type="button" className="btn btn-secondary" disabled={pathBBusy} onClick={onProbePathB}>
+            {pathBBusy ? 'Probing…' : 'Run WebAuthn probe'}
+          </button>
+        </div>
+        {pathBProbe ? (
+          <div
+            className="pack-error"
+            role="status"
+            style={{ marginTop: '0.5rem', fontSize: '0.8125rem' }}
+            data-testid={`webauthn-probe-${pathBProbe.kind}`}
+          >
+            <strong>{pathBProbe.kind}</strong>: {pathBProbe.message}
+            <p style={{ margin: '0.35rem 0 0', color: 'var(--lz-muted)' }}>{pathBProbe.honesty}</p>
+          </div>
+        ) : null}
       </div>
     </section>
   )

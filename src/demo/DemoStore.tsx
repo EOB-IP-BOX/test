@@ -2,6 +2,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
@@ -10,7 +11,8 @@ import { evaluatePackAccess, type PackAccessResult } from './packAccess'
 import { createInitialDemoState } from './seed'
 import type { DemoState, GrantStatus, OeCase, OeRequest, StepUpChallenge } from './types'
 
-const STORAGE_KEY = 'letzz_demo_hub_state_v1'
+export const DEMO_HUB_STORAGE_KEY = 'letzz_demo_hub_state_v1'
+const STORAGE_KEY = DEMO_HUB_STORAGE_KEY
 
 function loadState(): DemoState {
   try {
@@ -57,8 +59,27 @@ type DemoStoreValue = {
 
 const DemoStoreContext = createContext<DemoStoreValue | null>(null)
 
+function mergeStoredState(raw: string): DemoState | null {
+  try {
+    const parsed = JSON.parse(raw) as DemoState
+    return { ...createInitialDemoState(), ...parsed, stepUpChallenges: parsed.stepUpChallenges ?? [] }
+  } catch {
+    return null
+  }
+}
+
 export function DemoStoreProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<DemoState>(() => loadState())
+
+  useEffect(() => {
+    function onStorage(e: StorageEvent) {
+      if (e.key !== STORAGE_KEY || e.newValue == null) return
+      const merged = mergeStoredState(e.newValue)
+      if (merged) setState(merged)
+    }
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
+  }, [])
 
   const commit = useCallback((updater: (prev: DemoState) => DemoState) => {
     setState((prev) => {

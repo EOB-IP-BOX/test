@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { FollowUpRequestWizardStub } from '../../components/FollowUpRequestWizardStub'
 import { DemoPill } from '../../components/StatusBadge'
 import { useDemoStore } from '../../demo/DemoStore'
 
@@ -21,6 +22,7 @@ export function RequestsPage() {
       <p className="page-sub">
         Compose outbound document requests <DemoPill />
       </p>
+      <FollowUpRequestWizardStub />
       <div className="panel" style={{ marginBottom: '1rem' }}>
         <h2>Compose (DEMO)</h2>
         <form onSubmit={onCompose}>

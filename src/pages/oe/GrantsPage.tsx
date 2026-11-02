@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { GrantPackStepUpGate } from '../../components/GrantPackStepUpGate'
 import { DemoPill, GrantBadge } from '../../components/StatusBadge'
 import {
@@ -26,11 +26,12 @@ export function GrantsPage() {
   const [gateFailure, setGateFailure] = useState<PackAccessFailure | null>(null)
   const [packBusy, setPackBusy] = useState(false)
 
-  function applyPackResult(
-    grantId: string,
-    result: ReturnType<typeof tryPackPreview>,
-    challengeId: string,
-  ) {
+  const applyPackResult = useCallback(
+    (
+      grantId: string,
+      result: ReturnType<typeof tryPackPreview>,
+      challengeId: string,
+    ) => {
     if (!result.ok) {
       if (result.errorCode === 'STEP_UP_REQUIRED' || result.errorCode === 'STEP_UP_DENIED') {
         setGateGrantId(grantId)
@@ -52,7 +53,17 @@ export function GrantsPage() {
     setGateFailure(null)
     setPackError('')
     setPackPreview(result.previewLines.join('\n'))
-  }
+    },
+    [],
+  )
+
+  useEffect(() => {
+    if (!gateGrantId || !gateChallengeId) return
+    const challenge = state.stepUpChallenges.find((c) => c.id === gateChallengeId)
+    if (challenge?.status !== 'approved') return
+    const result = tryPackPreview(gateGrantId, gateChallengeId)
+    applyPackResult(gateGrantId, result, gateChallengeId)
+  }, [state.stepUpChallenges, gateGrantId, gateChallengeId, tryPackPreview, applyPackResult])
 
   function onViewPack(grantId: string) {
     setActiveGrantId(grantId)
