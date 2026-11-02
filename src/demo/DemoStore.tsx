@@ -7,6 +7,7 @@ import {
   useState,
   type ReactNode,
 } from 'react'
+import { conciergeStubReply } from './conciergeStub'
 import { evaluatePackAccess, type PackAccessResult } from './packAccess'
 import { createInitialDemoState } from './seed'
 import type { DemoState, GrantStatus, OeCase, OeRequest, StepUpChallenge } from './types'
@@ -49,6 +50,9 @@ type DemoStoreValue = {
   sendRequest: (id: string) => void
   updateCaseStatus: (id: string, status: OeCase['status']) => void
   sharePackage: (id: string) => void
+  createDraftPackage: (name: string, purpose: string, recipientLabel: string) => string
+  togglePackageDocument: (packageId: string, documentId: string) => void
+  markPackageReady: (packageId: string) => void
   appendAssistant: (text: string) => void
   toggleSetting: (key: keyof DemoState['settings']) => void
   ensureStepUpChallenge: (grantId: string) => StepUpChallenge
@@ -179,20 +183,78 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
     [commit],
   )
 
-  const appendAssistant = useCallback(
-    (text: string) => {
+  const createDraftPackage = useCallback(
+    (name: string, purpose: string, recipientLabel: string): string => {
+      const id = `pkg-${Date.now().toString(36)}`
       commit((prev) => ({
         ...prev,
-        assistantThread: [
-          ...prev.assistantThread,
-          { id: `u-${Date.now()}`, role: 'user', text },
+        packages: [
           {
-            id: `a-${Date.now()}`,
-            role: 'assistant',
-            text: 'DEMO: Local Concierge acknowledgement only. No server GPT call in this hub.',
+            id,
+            name: name.trim() || 'Untitled pack (DEMO)',
+            purpose: purpose.trim() || 'Hash-only bundle',
+            documentIds: [],
+            status: 'draft' as const,
+            recipientLabel: recipientLabel.trim() || 'Demo recipient',
           },
+          ...prev.packages,
         ],
       }))
+      return id
+    },
+    [commit],
+  )
+
+  const togglePackageDocument = useCallback(
+    (packageId: string, documentId: string) => {
+      commit((prev) => ({
+        ...prev,
+        packages: prev.packages.map((p) => {
+          if (p.id !== packageId || p.status !== 'draft') return p
+          const has = p.documentIds.includes(documentId)
+          return {
+            ...p,
+            documentIds: has
+              ? p.documentIds.filter((d) => d !== documentId)
+              : [...p.documentIds, documentId],
+          }
+        }),
+      }))
+    },
+    [commit],
+  )
+
+  const markPackageReady = useCallback(
+    (packageId: string) => {
+      commit((prev) => ({
+        ...prev,
+        packages: prev.packages.map((p) =>
+          p.id === packageId && p.documentIds.length > 0
+            ? { ...p, status: 'ready' as const }
+            : p,
+        ),
+      }))
+    },
+    [commit],
+  )
+
+  const appendAssistant = useCallback(
+    (text: string) => {
+      commit((prev) => {
+        const reply = conciergeStubReply(text, prev)
+        return {
+          ...prev,
+          assistantThread: [
+            ...prev.assistantThread,
+            { id: `u-${Date.now()}`, role: 'user', text },
+            {
+              id: `a-${Date.now()}`,
+              role: 'assistant',
+              text: reply,
+            },
+          ],
+        }
+      })
     },
     [commit],
   )
@@ -295,6 +357,9 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
       sendRequest,
       updateCaseStatus,
       sharePackage,
+      createDraftPackage,
+      togglePackageDocument,
+      markPackageReady,
       appendAssistant,
       toggleSetting,
       ensureStepUpChallenge,
@@ -312,6 +377,9 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
       sendRequest,
       updateCaseStatus,
       sharePackage,
+      createDraftPackage,
+      togglePackageDocument,
+      markPackageReady,
       appendAssistant,
       toggleSetting,
       ensureStepUpChallenge,

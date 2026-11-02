@@ -35,9 +35,15 @@ Build for Pages (base path `/test/`):
 npm run build
 ```
 
-## Playwright smoke (grant pack honesty)
+## Playwright smoke
 
-Exercises password gate (`demo-hub-password-gate`), OE Grants step-up gate, Path B WebAuthn probe, Wallet loopback approve, and `GRANT_REVOKED` ordering. Uses hub `data-testid` hooks (`grant-pack-step-up-gate`, `grant-pack-path-b-probe`, `webauthn-probe-*`, `wallet-step-up-inbox`, `grant-pack-preview`, `grant-pack-error`).
+**Grant pack honesty:** password gate, OE Grants step-up, Path B WebAuthn probe, Wallet loopback approve, single-tab re-view, `GRANT_REVOKED` ordering.
+
+**Documents and Packages:** inspect/verify hash, blocked download, draft pack assembly, manifest copy, Assistant stub.
+
+Hooks include `wallet-documents-list`, `wallet-document-detail`, `wallet-package-create`, `wallet-package-assembler`, `wallet-package-manifest-preview`, `wallet-assistant-thread`, plus grant pack ids above.
+
+Post-deploy: `deploy-pages.yml` runs `smoke-pages` against live Pages URL after deploy succeeds.
 
 ```bash
 npm install
@@ -63,9 +69,9 @@ Screenshots are off by default (Pages can be flaky); traces on first retry only.
 - Welcome → Home
 - Inbox mark-read
 - Grant / reject pending grants
-- Documents list (hashes)
-- Packages view + mark shared
-- Assistant local stub chat
+- Documents: category filter, inspect detail, copy hash, verify-only paste check, blocked PDF download honesty
+- Packages: create draft, checkbox assemble hashes, mark ready, mark shared, copy JSON manifest (`vaultBytesIncluded: false`)
+- Assistant: quick prompts + rule-based local stub (no GPT, reads demo state only)
 - Data Subject index
 - Settings toggles + reset demo data
 
@@ -81,3 +87,11 @@ Screenshots are off by default (Pages can be flaky); traces on first retry only.
 - Subject search
 
 State persists in `localStorage` for the browser session; gate uses `sessionStorage`. Chooser writes `letzz.debug.localAccount` (`Wallet Subject` or `Analyst`) like the local Platform web desk.
+
+## Backlog (honest gaps)
+
+- Wire manifest copy to real Platform API grant payload shape (still hash-only).
+- OE Cases desk: pack preview from case row (not only Grants).
+- Data Subject tab: interactive grant-to-source simulation with read-only enforcement.
+- Visual parity pass against LETZZ Wallet Subject web tokens (Notify Blue / UBI crimson).
+- Optional: Concierge degraded mode banner when `localConcierge` setting off.

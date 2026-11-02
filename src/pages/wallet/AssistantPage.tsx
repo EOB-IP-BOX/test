@@ -2,6 +2,13 @@ import { useState, type FormEvent } from 'react'
 import { DemoPill } from '../../components/StatusBadge'
 import { useDemoStore } from '../../demo/DemoStore'
 
+const QUICK_PROMPTS = [
+  'Summarize pending grants',
+  'What packages do I have?',
+  'Can I download a PDF from the vault?',
+  'Explain step-up and WebAuthn in this hub',
+]
+
 export function AssistantPage() {
   const { state, appendAssistant } = useDemoStore()
   const [draft, setDraft] = useState('')
@@ -13,6 +20,10 @@ export function AssistantPage() {
     setDraft('')
   }
 
+  function sendQuick(text: string) {
+    appendAssistant(text)
+  }
+
   return (
     <>
       <h1 className="page-title">AI Concierge</h1>
@@ -20,15 +31,22 @@ export function AssistantPage() {
         Wallet-only assistant simulation <DemoPill />
       </p>
       <p className="honesty">
-        No paywalled server model in this hub. Proposals only; user confirms actions elsewhere in
-        the sim.
+        Non-generative local stub only: fixed replies from demo state and help text. No paywalled
+        server model, no invented compliance outcomes, no document send.
       </p>
-      <div className="panel">
-        <div className="chat-thread">
+      <div className="panel" data-testid="wallet-assistant-panel">
+        <div className="chat-thread" data-testid="wallet-assistant-thread">
           {state.assistantThread.map((m) => (
             <div key={m.id} className={`chat-bubble ${m.role === 'user' ? 'user' : ''}`}>
               {m.text}
             </div>
+          ))}
+        </div>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.75rem' }}>
+          {QUICK_PROMPTS.map((label) => (
+            <button key={label} type="button" className="btn btn-secondary" onClick={() => sendQuick(label)}>
+              {label}
+            </button>
           ))}
         </div>
         <form onSubmit={onSend}>
