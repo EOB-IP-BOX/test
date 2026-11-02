@@ -38,13 +38,32 @@ function normalizeSettings(
   }
 }
 
+function normalizeLifeStoreSources(
+  raw: DemoState['lifeStoreSources'] | undefined,
+  seed: DemoState['lifeStoreSources'],
+): DemoState['lifeStoreSources'] {
+  const list = raw ?? seed
+  return list.map((s) => {
+    const fromSeed = seed.find((x) => x.id === s.id)
+    const merged = { ...(fromSeed ?? s), ...s }
+    if (merged.status === 'indexing') {
+      const pct =
+        typeof merged.indexingPercent === 'number'
+          ? merged.indexingPercent
+          : (fromSeed?.indexingPercent ?? 12)
+      return { ...merged, indexingPercent: pct }
+    }
+    return { ...merged, indexingPercent: null }
+  })
+}
+
 function mergeParsedDemoState(parsed: DemoState): DemoState {
   const seed = createInitialDemoState()
   return {
     ...seed,
     ...parsed,
     stepUpChallenges: parsed.stepUpChallenges ?? [],
-    lifeStoreSources: parsed.lifeStoreSources ?? seed.lifeStoreSources,
+    lifeStoreSources: normalizeLifeStoreSources(parsed.lifeStoreSources, seed.lifeStoreSources),
     settings: normalizeSettings(parsed.settings as LegacySettings, seed.settings),
   }
 }
@@ -128,6 +147,33 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
       return next
     })
   }, [])
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      commit((prev) => {
+        let touched = false
+        const lifeStoreSources = prev.lifeStoreSources.map((s) => {
+          if (s.status !== 'indexing') return s
+          touched = true
+          const pct = s.indexingPercent ?? 10
+          const nextPct = Math.min(100, pct + 12)
+          if (nextPct >= 100) {
+            return {
+              ...s,
+              status: 'ready' as const,
+              indexingPercent: null,
+              linkedDocumentIds:
+                s.linkedDocumentIds.length > 0 ? s.linkedDocumentIds : ['doc-degree-hawking'],
+            }
+          }
+          return { ...s, indexingPercent: nextPct }
+        })
+        if (!touched) return prev
+        return { ...prev, lifeStoreSources }
+      })
+    }, 1400)
+    return () => window.clearInterval(timer)
+  }, [commit])
 
   const resetDemo = useCallback(() => {
     const fresh = createInitialDemoState()

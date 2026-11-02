@@ -83,6 +83,8 @@ export type LifeStoreSource = {
   label: string
   connector: string
   status: LifeStoreSourceStatus
+  /** 0–100 while status is indexing; null when not indexing (device-only DEMO sim). */
+  indexingPercent: number | null
   /** Document ids indexed from device vault (hash references only in this hub). */
   linkedDocumentIds: string[]
   /** Simulated read-only grant to an OE desk (consent distinct from delivery). */

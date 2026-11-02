@@ -3,7 +3,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('/test/fonts/IBMPlexSans-Regular.woff2') format('woff2');
+  src: url('../assets/fonts/IBMPlexSans-Regular.woff2') format('woff2');
 }
 
 @font-face {
@@ -11,7 +11,7 @@
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url('/test/fonts/IBMPlexSans-Medium.woff2') format('woff2');
+  src: url('../assets/fonts/IBMPlexSans-Medium.woff2') format('woff2');
 }
 
 @font-face {
@@ -19,7 +19,7 @@
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url('/test/fonts/IBMPlexSans-SemiBold.woff2') format('woff2');
+  src: url('../assets/fonts/IBMPlexSans-SemiBold.woff2') format('woff2');
 }
 
 @font-face {
@@ -27,7 +27,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('/test/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+  src: url('../assets/fonts/IBMPlexMono-Regular.woff2') format('woff2');
 }
 
 :root {
@@ -410,6 +410,21 @@ button {
   border-left: 3px solid var(--lz-warning);
   padding-left: 0.65rem;
   margin: 1rem 0;
+}
+
+.index-progress {
+  background: var(--lz-surface-inset);
+  border-radius: 999px;
+  height: 6px;
+  margin-top: 0.35rem;
+  overflow: hidden;
+}
+
+.index-progress-fill {
+  background: linear-gradient(90deg, var(--lz-info), var(--lz-accent));
+  border-radius: 999px;
+  height: 100%;
+  transition: width 0.35s ease;
 }
 
 .chat-thread {

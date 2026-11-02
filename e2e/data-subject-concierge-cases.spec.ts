@@ -8,7 +8,8 @@ test.describe('LETZZ test hub Data Subject, Concierge, case pack', () => {
 
   test('Data Subject life-store grant simulation and byte gate', async ({ page }) => {
     await enterDemoHub(page, '/wallet/data-subject')
-    await expect(page.getByTestId('data-subject-honesty')).toContainText(/device|hash-only|Platform/i)
+    await expect(page.getByTestId('data-subject-honesty')).toContainText(/device|Platform index/i)
+    await expect(page.getByTestId('life-source-index-progress-life-health')).toBeVisible()
     await page.getByTestId('life-source-life-vault').click()
     await page.getByTestId('data-subject-simulate-grant').click()
     await expect(page.getByTestId('life-source-grant-life-vault')).toContainText('Lux Compliance Demo OE')
@@ -64,5 +65,12 @@ test.describe('LETZZ test hub Data Subject, Concierge, case pack', () => {
     await enterDemoHub(page, '/oe/cases/case-014')
     await expect(page.getByTestId('case-pack-pending-hint')).toContainText(/pending/i)
     await expect(page.getByTestId('case-view-pack')).toHaveCount(0)
+  })
+
+  test('OE subject mirrors wallet life-store grants and indexing hint', async ({ page }) => {
+    await enterDemoHub(page, '/oe/subjects/sub-bond')
+    await expect(page.getByTestId('oe-subject-life-store-sync')).toContainText(/Platform does not build/i)
+    await expect(page.getByTestId('oe-life-grant-life-calendar')).toContainText('Lux Compliance Demo OE')
+    await expect(page.getByTestId('oe-subject-indexing-hint')).toContainText(/Device indexing/i)
   })
 })

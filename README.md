@@ -95,5 +95,5 @@ State persists in `localStorage` for the browser session; gate uses `sessionStor
 
 - Wire manifest copy to real Platform API grant payload shape (still hash-only).
 - Life-store: real connector states (indexing progress) and cross-tab sync with OE subject views.
-- Self-hosted IBM Plex on GitHub Pages base path audit (font URLs vs `base` in vite.config).
+- Self-hosted IBM Plex via Vite-bundled `src/assets/fonts` (CSS `url()` rewrites for `/test/` on Pages).
 - Concierge: subscription / entitlement UI before any real server heavy wiring.

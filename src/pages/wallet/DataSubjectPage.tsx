@@ -59,9 +59,10 @@ export function DataSubjectPage() {
         Life store index (Codex 4.4 DEMO) <DemoPill />
       </p>
       <p className="honesty" data-testid="data-subject-honesty">
-        User-controlled, locally indexed sources. Read-only grants expose hash references to an OE
-        desk only after you simulate consent here. No Platform vault bytes, no cloud inference on
-        this tab.
+        User-controlled, locally indexed sources. Indexing runs on this simulated device only (not on
+        LETZZ Platform). Read-only grants expose hash references to an OE desk only after you
+        simulate consent here. OE subject views mirror grants via shared demo storage, not a
+        Platform search index.
       </p>
 
       <div className="panel" data-testid="data-subject-life-store">
@@ -89,7 +90,25 @@ export function DataSubjectPage() {
                 <strong>{source.label}</strong>
                 <div className="work-row-meta">
                   {source.connector} · status {statusLabel(source.status)}
+                  {source.status === 'indexing' && source.indexingPercent != null
+                    ? ` · ${source.indexingPercent}% (device index)`
+                    : null}
                 </div>
+                {source.status === 'indexing' && source.indexingPercent != null ? (
+                  <div
+                    className="index-progress"
+                    role="progressbar"
+                    aria-valuenow={source.indexingPercent}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    data-testid={`life-source-index-progress-${source.id}`}
+                  >
+                    <div
+                      className="index-progress-fill"
+                      style={{ width: `${source.indexingPercent}%` }}
+                    />
+                  </div>
+                ) : null}
                 {source.readOnlyGrantOe ? (
                   <div className="work-row-meta" data-testid={`life-source-grant-${source.id}`}>
                     Read-only grant → {source.readOnlyGrantOe}
