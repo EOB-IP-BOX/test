@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom'
 import { DemoBanner } from '../components/DemoBanner'
+import { persistLocalAccount, readPersistedLocalAccount } from '../demo/roleSession'
 
 export function Chooser() {
+  const lastRole = readPersistedLocalAccount()
+
   return (
     <>
       <DemoBanner />
@@ -10,9 +13,21 @@ export function Chooser() {
         <p className="page-sub">
           Two peer apps only: Wallet Subject desk and Obliged Entity operate desk (LETZZ Platform).
           Platform Owner ops monitoring is out of scope for this hub.
+          {lastRole ? (
+            <>
+              {' '}
+              Last surface this tab: <strong>{lastRole}</strong> (sessionStorage{' '}
+              <code>letzz.debug.localAccount</code>).
+            </>
+          ) : null}
         </p>
         <div className="choose-grid">
-          <Link to="/wallet/welcome" className="panel choose-card" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Link
+            to="/wallet/welcome"
+            className="panel choose-card"
+            style={{ textDecoration: 'none', color: 'inherit' }}
+            onClick={() => persistLocalAccount('Wallet Subject')}
+          >
             <h3>Wallet Subject desk</h3>
             <p>
               Simulated LETZZ Wallet web experience: Home, Documents, Packages, Assistant, Data
@@ -20,7 +35,12 @@ export function Chooser() {
             </p>
             <span className="badge badge-demo">Interactive DEMO</span>
           </Link>
-          <Link to="/oe/dashboard" className="panel choose-card" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Link
+            to="/oe/dashboard"
+            className="panel choose-card"
+            style={{ textDecoration: 'none', color: 'inherit' }}
+            onClick={() => persistLocalAccount('Analyst')}
+          >
             <h3>Obliged Entity operate desk</h3>
             <p>
               Simulated LETZZ Platform OE desk: subjects, cases, requests, grants, search. No live

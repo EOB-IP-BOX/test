@@ -1,4 +1,4 @@
-export type GrantStatus = 'pending' | 'granted' | 'rejected'
+export type GrantStatus = 'pending' | 'granted' | 'rejected' | 'revoked'
 
 export type DemoDocument = {
   id: string
@@ -26,6 +26,17 @@ export type InboxItem = {
   unread: boolean
 }
 
+export type StepUpChallengeStatus = 'pending' | 'approved' | 'denied'
+
+export type StepUpChallenge = {
+  id: string
+  grantId: string
+  action: 'view_full'
+  status: StepUpChallengeStatus
+  createdAt: string
+  label: string
+}
+
 export type GrantRequest = {
   id: string
   oeName: string
@@ -33,6 +44,8 @@ export type GrantRequest = {
   scope: string
   status: GrantStatus
   requestedAt: string
+  /** Document ids included in view_full pack preview (hash-only). */
+  packDocumentIds?: string[]
 }
 
 export type WalletSubject = {
@@ -78,6 +91,7 @@ export type DemoState = {
   packages: DemoPackage[]
   inbox: InboxItem[]
   grants: GrantRequest[]
+  stepUpChallenges: StepUpChallenge[]
   subjects: WalletSubject[]
   cases: OeCase[]
   requests: OeRequest[]

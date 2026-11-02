@@ -55,6 +55,7 @@ npm run build
 - Cases list, detail, status transitions
 - Request compose, draft, mark sent
 - Grants approve/deny (shared state with wallet)
+- **Grants pack flow (Prometheus honesty sim):** View pack on a granted row → step-up gate (`STEP_UP_DENIED`) → Wallet Subject Home → Approve (loopback) → retry → hash-only pack preview. Revoke before or after step-up → `GRANT_REVOKED` (not stale step-up denial). Pre-seeded revoked row: DEMO Elon Musk grant-4.
 - Subject search
 
-State persists in `localStorage` for the browser session; gate uses `sessionStorage`.
+State persists in `localStorage` for the browser session; gate uses `sessionStorage`. Chooser writes `letzz.debug.localAccount` (`Wallet Subject` or `Analyst`) like the local Platform web desk.

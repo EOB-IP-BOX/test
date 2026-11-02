@@ -6,8 +6,9 @@ import {
   useState,
   type ReactNode,
 } from 'react'
+import { evaluatePackAccess, type PackAccessResult } from './packAccess'
 import { createInitialDemoState } from './seed'
-import type { DemoState, GrantStatus, OeCase, OeRequest } from './types'
+import type { DemoState, GrantStatus, OeCase, OeRequest, StepUpChallenge } from './types'
 
 const STORAGE_KEY = 'letzz_demo_hub_state_v1'
 
@@ -16,7 +17,7 @@ function loadState(): DemoState {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw) {
       const parsed = JSON.parse(raw) as DemoState
-      return { ...createInitialDemoState(), ...parsed }
+      return { ...createInitialDemoState(), ...parsed, stepUpChallenges: parsed.stepUpChallenges ?? [] }
     }
   } catch {
     /* use seed */
@@ -32,10 +33,15 @@ function persistState(state: DemoState) {
   }
 }
 
+function newChallengeId(): string {
+  return `step-${Date.now().toString(36)}`
+}
+
 type DemoStoreValue = {
   state: DemoState
   resetDemo: () => void
   setGrantStatus: (id: string, status: GrantStatus) => void
+  revokeGrant: (id: string) => void
   markInboxRead: (id: string) => void
   addRequest: (req: Omit<OeRequest, 'id' | 'createdAt' | 'status'>) => void
   sendRequest: (id: string) => void
@@ -43,6 +49,10 @@ type DemoStoreValue = {
   sharePackage: (id: string) => void
   appendAssistant: (text: string) => void
   toggleSetting: (key: keyof DemoState['settings']) => void
+  ensureStepUpChallenge: (grantId: string) => StepUpChallenge
+  approveStepUpChallenge: (challengeId: string) => void
+  getLatestChallengeForGrant: (grantId: string) => StepUpChallenge | undefined
+  tryPackPreview: (grantId: string, challenge?: StepUpChallenge | string) => PackAccessResult
 }
 
 const DemoStoreContext = createContext<DemoStoreValue | null>(null)
@@ -69,6 +79,16 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
       commit((prev) => ({
         ...prev,
         grants: prev.grants.map((g) => (g.id === id ? { ...g, status } : g)),
+      }))
+    },
+    [commit],
+  )
+
+  const revokeGrant = useCallback(
+    (id: string) => {
+      commit((prev) => ({
+        ...prev,
+        grants: prev.grants.map((g) => (g.id === id ? { ...g, status: 'revoked' as const } : g)),
       }))
     },
     [commit],
@@ -166,11 +186,87 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
     [commit],
   )
 
+  const getLatestChallengeForGrant = useCallback(
+    (grantId: string): StepUpChallenge | undefined => {
+      const matches = state.stepUpChallenges.filter((c) => c.grantId === grantId)
+      if (matches.length === 0) return undefined
+      return matches[matches.length - 1]
+    },
+    [state.stepUpChallenges],
+  )
+
+  const ensureStepUpChallenge = useCallback(
+    (grantId: string): StepUpChallenge => {
+      const grant = state.grants.find((g) => g.id === grantId)
+      const label = grant
+        ? `view_full pack for ${grant.subjectName} (${grant.oeName})`
+        : `view_full pack for grant ${grantId}`
+
+      const existing = state.stepUpChallenges.find(
+        (c) => c.grantId === grantId && c.status === 'pending',
+      )
+      if (existing) return existing
+
+      const created: StepUpChallenge = {
+        id: newChallengeId(),
+        grantId,
+        action: 'view_full',
+        status: 'pending',
+        createdAt: new Date().toISOString(),
+        label,
+      }
+
+      commit((prev) => ({
+        ...prev,
+        stepUpChallenges: [...prev.stepUpChallenges, created],
+      }))
+
+      return created
+    },
+    [commit, state.grants, state.stepUpChallenges],
+  )
+
+  const approveStepUpChallenge = useCallback(
+    (challengeId: string) => {
+      commit((prev) => ({
+        ...prev,
+        stepUpChallenges: prev.stepUpChallenges.map((c) =>
+          c.id === challengeId ? { ...c, status: 'approved' as const } : c,
+        ),
+      }))
+    },
+    [commit],
+  )
+
+  const tryPackPreview = useCallback(
+    (grantId: string, challengeRef?: StepUpChallenge | string): PackAccessResult => {
+      const grant = state.grants.find((g) => g.id === grantId)
+      if (!grant) {
+        return {
+          ok: false,
+          errorCode: 'GRANT_NOT_ACTIVE',
+          message: 'Grant not found in demo state.',
+        }
+      }
+      let challenge: StepUpChallenge | undefined
+      if (typeof challengeRef === 'string') {
+        challenge = state.stepUpChallenges.find((c) => c.id === challengeRef)
+      } else if (challengeRef) {
+        challenge = challengeRef
+      } else {
+        challenge = getLatestChallengeForGrant(grantId)
+      }
+      return evaluatePackAccess(grant, challenge, state.documents)
+    },
+    [getLatestChallengeForGrant, state.documents, state.grants, state.stepUpChallenges],
+  )
+
   const value = useMemo(
     () => ({
       state,
       resetDemo,
       setGrantStatus,
+      revokeGrant,
       markInboxRead,
       addRequest,
       sendRequest,
@@ -178,11 +274,16 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
       sharePackage,
       appendAssistant,
       toggleSetting,
+      ensureStepUpChallenge,
+      approveStepUpChallenge,
+      getLatestChallengeForGrant,
+      tryPackPreview,
     }),
     [
       state,
       resetDemo,
       setGrantStatus,
+      revokeGrant,
       markInboxRead,
       addRequest,
       sendRequest,
@@ -190,6 +291,10 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
       sharePackage,
       appendAssistant,
       toggleSetting,
+      ensureStepUpChallenge,
+      approveStepUpChallenge,
+      getLatestChallengeForGrant,
+      tryPackPreview,
     ],
   )
 

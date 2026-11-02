@@ -138,6 +138,32 @@ button {
   color: #991b1b;
 }
 
+.badge-revoked {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.pack-preview {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--lz-surface-muted);
+  border-radius: var(--lz-radius-md);
+  font-family: var(--lz-font-mono);
+  font-size: 0.75rem;
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+.pack-error {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--lz-radius-md);
+  border: 1px solid var(--lz-danger);
+  background: #fef2f2;
+  color: var(--lz-danger);
+  font-size: 0.8125rem;
+}
+
 .panel {
   background: var(--lz-surface);
   border: 1px solid var(--lz-border);

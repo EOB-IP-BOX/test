@@ -2,7 +2,13 @@ import type { GrantStatus } from '../demo/types'
 
 export function GrantBadge({ status }: { status: GrantStatus }) {
   const cls =
-    status === 'pending' ? 'badge-pending' : status === 'granted' ? 'badge-granted' : 'badge-rejected'
+    status === 'pending'
+      ? 'badge-pending'
+      : status === 'granted'
+        ? 'badge-granted'
+        : status === 'revoked'
+          ? 'badge-revoked'
+          : 'badge-rejected'
   return <span className={`badge ${cls}`}>{status}</span>
 }
 

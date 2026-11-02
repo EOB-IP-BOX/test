@@ -59,6 +59,22 @@ export function createInitialDemoState(): DemoState {
       synthetic: true as const,
       note: 'Clearly fictional demo document.',
     },
+    {
+      id: 'doc-residence-musk',
+      title: 'Residence permit (DEMO: Elon Musk)',
+      category: 'Identity',
+      hashSha256: fakeHash('musk-residence'),
+      synthetic: true as const,
+      note: 'Celebrity fixture for cross-border pack demos.',
+    },
+    {
+      id: 'doc-payroll-nick',
+      title: 'Payroll excerpt (DEMO: Nick Product Owner, EOB Cap)',
+      category: 'Financial',
+      hashSha256: fakeHash('nick-payroll'),
+      synthetic: true as const,
+      note: 'Team fixture, not HR payroll export.',
+    },
   ]
 
   const packages = [
@@ -112,6 +128,7 @@ export function createInitialDemoState(): DemoState {
       scope: 'Read metadata for doc-utility-cruise',
       status: 'pending' as const,
       requestedAt: '2026-11-01T09:15:00Z',
+      packDocumentIds: ['doc-passport-bond', 'doc-utility-cruise'],
     },
     {
       id: 'grant-2',
@@ -120,16 +137,38 @@ export function createInitialDemoState(): DemoState {
       scope: 'Case file LF-2026-014 document hashes',
       status: 'pending' as const,
       requestedAt: '2026-11-02T07:00:00Z',
+      packDocumentIds: ['doc-id-eob', 'doc-payroll-nick'],
     },
     {
       id: 'grant-3',
       oeName: 'Arcor Capital Demo RAIF',
       subjectName: 'DEMO: Taylor Swift ASBL',
-      scope: 'Subscription pack pkg-fund-sub (hash list only)',
+      scope: 'Subscription pack pkg-fund-sub (view_full, hash list only)',
       status: 'granted' as const,
       requestedAt: '2026-10-28T14:22:00Z',
+      packDocumentIds: ['doc-contract-swift', 'doc-bank-oprah'],
+    },
+    {
+      id: 'grant-4',
+      oeName: 'Lux Compliance Demo OE',
+      subjectName: 'DEMO: Elon Musk',
+      scope: 'Revoked pack demo (exercise GRANT_REVOKED honesty)',
+      status: 'revoked' as const,
+      requestedAt: '2026-10-15T11:00:00Z',
+      packDocumentIds: ['doc-residence-musk'],
+    },
+    {
+      id: 'grant-5',
+      oeName: 'EOB Cap Sandbox OE',
+      subjectName: 'DEMO: Oprah Winfrey',
+      scope: 'KYC refresh pack after wallet grant (view_full)',
+      status: 'granted' as const,
+      requestedAt: '2026-11-02T08:00:00Z',
+      packDocumentIds: ['doc-bank-oprah', 'doc-passport-bond'],
     },
   ]
+
+  const stepUpChallenges: DemoState['stepUpChallenges'] = []
 
   const subjects = [
     { id: 'sub-bond', displayName: 'DEMO: James Bond', role: 'Wallet Subject', demoLabel: 'Celebrity fixture' },
@@ -137,6 +176,8 @@ export function createInitialDemoState(): DemoState {
     { id: 'sub-swift', displayName: 'DEMO: Taylor Swift ASBL', role: 'Corporate entity', demoLabel: 'Synthetic entity' },
     { id: 'sub-cruise', displayName: 'DEMO: Tom Cruise', role: 'Wallet Subject', demoLabel: 'Celebrity fixture' },
     { id: 'sub-oprah', displayName: 'DEMO: Oprah Winfrey', role: 'Wallet Subject', demoLabel: 'Celebrity fixture' },
+    { id: 'sub-musk', displayName: 'DEMO: Elon Musk', role: 'Wallet Subject', demoLabel: 'Celebrity fixture' },
+    { id: 'sub-hawking', displayName: 'DEMO: Stephen Hawking', role: 'Wallet Subject', demoLabel: 'Celebrity fixture' },
   ]
 
   const cases = [
@@ -206,6 +247,7 @@ export function createInitialDemoState(): DemoState {
     packages,
     inbox,
     grants,
+    stepUpChallenges,
     subjects,
     cases,
     requests,

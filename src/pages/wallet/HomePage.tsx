@@ -3,15 +3,57 @@ import { DemoPill, GrantBadge } from '../../components/StatusBadge'
 import { useDemoStore } from '../../demo/DemoStore'
 
 export function HomePage() {
-  const { state, setGrantStatus, markInboxRead } = useDemoStore()
+  const { state, setGrantStatus, markInboxRead, approveStepUpChallenge } = useDemoStore()
   const pendingGrants = state.grants.filter((g) => g.status === 'pending')
+  const pendingStepUps = state.stepUpChallenges.filter((c) => c.status === 'pending')
 
   return (
     <>
       <h1 className="page-title">Home</h1>
       <p className="page-sub">
-        Inbox and grant actions <DemoPill />
+        Inbox, grants, and DEBUG loopback step-up (Path A) <DemoPill />
       </p>
+
+      <section className="panel" style={{ marginBottom: '1rem' }} aria-labelledby="wallet-home-step-up">
+        <h2 id="wallet-home-step-up">Step-up inbox (Path A)</h2>
+        <p className="honesty" style={{ marginTop: 0 }}>
+          Approve here to satisfy view_full pack on the OE Grants desk. Loopback stand-in only, not
+          production Face ID or WebAuthn Path B.
+        </p>
+        {pendingStepUps.length === 0 ? (
+          <p>No pending step-up. On OE Grants, click View pack on a granted row to create a challenge.</p>
+        ) : (
+          <div className="row-list" data-testid="wallet-step-up-inbox">
+            {pendingStepUps.map((row) => {
+              const grant = state.grants.find((g) => g.id === row.grantId)
+              return (
+                <div key={row.id} className="work-row">
+                  <div>
+                    <span className="badge badge-pending">step-up pending</span>
+                    <div style={{ marginTop: '0.35rem' }}>
+                      <strong>{row.label}</strong>
+                    </div>
+                    <div className="work-row-meta">Challenge {row.id}</div>
+                    {grant ? (
+                      <div className="work-row-meta">
+                        Grant {grant.id} · {grant.subjectName}
+                      </div>
+                    ) : null}
+                  </div>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    aria-label={`Approve step-up ${row.id.slice(0, 8)}`}
+                    onClick={() => approveStepUpChallenge(row.id)}
+                  >
+                    Approve (loopback)
+                  </button>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </section>
 
       <section className="panel" style={{ marginBottom: '1rem' }}>
         <h2>Inbox</h2>
@@ -61,6 +103,8 @@ export function HomePage() {
         )}
         <p style={{ marginTop: '1rem' }}>
           <Link to="/wallet/packages">View packages</Link>
+          {' · '}
+          <Link to="/oe/grants">OE Grants desk (pack preview)</Link>
         </p>
       </section>
     </>
