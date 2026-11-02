@@ -56,6 +56,25 @@ test.describe('LETZZ test hub grant pack smoke', () => {
     await expect(error).toContainText('GRANT_REVOKED')
   })
 
+  test('Single-tab re-View pack after wallet approve shows preview', async ({ page }) => {
+    await openOeGrants(page)
+    await viewPackForSubject(page, 'Oprah Winfrey')
+    const gate = page.getByTestId('grant-pack-step-up-gate')
+    await expect(gate).toBeVisible()
+
+    await page.goto('#/wallet/home')
+    const inbox = page.getByTestId('wallet-step-up-inbox')
+    await expect(inbox).toBeVisible()
+    await inbox.getByRole('button', { name: /^Approve step-up/i }).click()
+
+    await page.goto('#/oe/grants')
+    await viewPackForSubject(page, 'Oprah Winfrey')
+
+    await expect(page.getByTestId('grant-pack-preview')).toBeVisible()
+    await expect(page.getByTestId('grant-pack-preview')).toContainText('DEMO permission pack')
+    await expect(page.getByTestId('grant-pack-step-up-gate')).toHaveCount(0)
+  })
+
   test('Revoke granted row before step-up shows GRANT_REVOKED not stale gate', async ({ page }) => {
     await openOeGrants(page)
     const row = page.locator('.work-row').filter({ hasText: 'Oprah Winfrey' })

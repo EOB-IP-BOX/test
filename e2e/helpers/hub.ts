@@ -17,8 +17,9 @@ export async function resetHubStorage(page: Page): Promise<void> {
 
 export async function enterDemoHub(page: Page, route = '/choose'): Promise<void> {
   await page.goto(hashPath('/'))
-  const password = page.locator('#pw')
-  if (await password.isVisible().catch(() => false)) {
+  const gate = page.getByTestId('demo-hub-password-gate')
+  const password = gate.locator('#pw')
+  if (await gate.isVisible().catch(() => false)) {
     await password.fill(DEMO_PASSWORD)
     await page.getByRole('button', { name: 'Enter demo hub' }).click()
     await page.waitForURL(/#\/choose/)

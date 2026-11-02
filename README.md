@@ -37,7 +37,7 @@ npm run build
 
 ## Playwright smoke (grant pack honesty)
 
-Exercises password gate, OE Grants step-up gate, Path B WebAuthn probe, Wallet loopback approve, and `GRANT_REVOKED` ordering. Uses hub `data-testid` hooks (`grant-pack-step-up-gate`, `grant-pack-path-b-probe`, `webauthn-probe-*`, `wallet-step-up-inbox`, `grant-pack-preview`, `grant-pack-error`).
+Exercises password gate (`demo-hub-password-gate`), OE Grants step-up gate, Path B WebAuthn probe, Wallet loopback approve, and `GRANT_REVOKED` ordering. Uses hub `data-testid` hooks (`grant-pack-step-up-gate`, `grant-pack-path-b-probe`, `webauthn-probe-*`, `wallet-step-up-inbox`, `grant-pack-preview`, `grant-pack-error`).
 
 ```bash
 npm install

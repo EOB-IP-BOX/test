@@ -30,7 +30,7 @@ export function PasswordGate() {
   }
 
   return (
-    <div className="gate-page">
+    <div className="gate-page" data-testid="demo-hub-password-gate">
       <div className="panel gate-card">
         <h1 className="page-title">LETZZ Test Hub</h1>
         <p className="page-sub">Letz File family demo gate (client-side only on GitHub Pages).</p>

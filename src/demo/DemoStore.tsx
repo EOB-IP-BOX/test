@@ -223,10 +223,12 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
         ? `view_full pack for ${grant.subjectName} (${grant.oeName})`
         : `view_full pack for grant ${grantId}`
 
-      const existing = state.stepUpChallenges.find(
-        (c) => c.grantId === grantId && c.status === 'pending',
-      )
-      if (existing) return existing
+      const forGrant = state.stepUpChallenges.filter((c) => c.grantId === grantId)
+      const pending = forGrant.find((c) => c.status === 'pending')
+      if (pending) return pending
+
+      const approved = [...forGrant].reverse().find((c) => c.status === 'approved')
+      if (approved) return approved
 
       const created: StepUpChallenge = {
         id: newChallengeId(),
