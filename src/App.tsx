@@ -10,6 +10,8 @@ import { CasesPage } from './pages/oe/CasesPage'
 import { DashboardPage } from './pages/oe/DashboardPage'
 import { GrantsPage } from './pages/oe/GrantsPage'
 import { RequestsPage } from './pages/oe/RequestsPage'
+import { OrganisationsPage } from './pages/oe/OrganisationsPage'
+import { ScreeningPage } from './pages/oe/ScreeningPage'
 import { SearchPage } from './pages/oe/SearchPage'
 import { SubjectDetailPage } from './pages/oe/SubjectDetailPage'
 import { SubjectsPage } from './pages/oe/SubjectsPage'
@@ -46,6 +48,8 @@ function AuthedRoutes() {
           <Route path="subjects/:id" element={<SubjectDetailPage />} />
           <Route path="cases" element={<CasesPage />} />
           <Route path="cases/:id" element={<CaseDetailPage />} />
+          <Route path="organisations" element={<OrganisationsPage />} />
+          <Route path="screening" element={<ScreeningPage />} />
           <Route path="requests" element={<RequestsPage />} />
           <Route path="grants" element={<GrantsPage />} />
           <Route path="search" element={<SearchPage />} />

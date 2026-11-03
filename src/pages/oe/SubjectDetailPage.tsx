@@ -1,11 +1,13 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { HonestyReloadControl } from '../../components/HonestyReloadControl'
 import { DemoPill } from '../../components/StatusBadge'
 import { useDemoStore } from '../../demo/DemoStore'
 
 export function SubjectDetailPage() {
   const { id } = useParams()
   const { state } = useDemoStore()
+  const [detailStamp, setDetailStamp] = useState<string | null>(null)
   const subject = state.subjects.find((s) => s.id === id)
   const cases = state.cases.filter((c) => c.subjectId === id)
 
@@ -39,6 +41,17 @@ export function SubjectDetailPage() {
       <p className="page-sub">
         {subject.role} · {subject.demoLabel} <DemoPill />
       </p>
+      <HonestyReloadControl
+        surface="subject detail"
+        testId="oe-subject-detail-reload"
+        honesty="getSubject simulation only. Distinct from the subjects directory. Not identity verification, not vault access, not licensed clearance."
+        onReplaced={() => setDetailStamp(new Date().toISOString())}
+      />
+      {detailStamp ? (
+        <p className="work-row-meta" data-testid="oe-subject-detail-stamp">
+          Last subject detail re-read: {detailStamp}
+        </p>
+      ) : null}
       <div className="panel">
         <h2>Related cases</h2>
         {cases.length === 0 ? (

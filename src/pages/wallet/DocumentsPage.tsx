@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { HonestyReloadControl } from '../../components/HonestyReloadControl'
 import { DemoPill } from '../../components/StatusBadge'
 import { verifyHashAgainstIndex } from '../../demo/documentVerify'
 import { useDemoStore } from '../../demo/DemoStore'
@@ -10,6 +11,7 @@ export function DocumentsPage() {
   const [pasteHash, setPasteHash] = useState('')
   const [verifyMessage, setVerifyMessage] = useState<string | null>(null)
   const [copyNotice, setCopyNotice] = useState<string | null>(null)
+  const [receiptStamp, setReceiptStamp] = useState<string | null>(null)
 
   const categories = useMemo(() => {
     const set = new Set(state.documents.map((d) => d.category))
@@ -54,6 +56,18 @@ export function DocumentsPage() {
         Prometheus honesty: vault bytes stay local on real Wallet. This page shows synthetic titles
         and demo hashes only.
       </p>
+
+      <HonestyReloadControl
+        surface="documents hash receipts"
+        testId="wallet-documents-hash-receipts-reload"
+        honesty="DEBUG loopback hash receipts only. Separate from any Local Cloud connectivity check. Not a vault library and not document bytes."
+        onReplaced={() => setReceiptStamp(new Date().toISOString())}
+      />
+      {receiptStamp ? (
+        <p className="work-row-meta" data-testid="wallet-documents-hash-receipts-stamp">
+          Last hash-receipts re-read: {receiptStamp} · {state.documents.length} indexed refs
+        </p>
+      ) : null}
 
       <div className="panel" style={{ marginBottom: '1rem' }}>
         <h2>Filter index</h2>

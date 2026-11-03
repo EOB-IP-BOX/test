@@ -1,6 +1,7 @@
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { GrantPackStepUpGate } from '../../components/GrantPackStepUpGate'
+import { HonestyReloadControl } from '../../components/HonestyReloadControl'
 import { DemoPill } from '../../components/StatusBadge'
 import { describePackFailure, type PackAccessFailure } from '../../demo/packAccess'
 import { useDemoStore } from '../../demo/DemoStore'
@@ -23,6 +24,7 @@ export function CaseDetailPage() {
   const [gateChallengeId, setGateChallengeId] = useState<string | null>(null)
   const [gateFailure, setGateFailure] = useState<PackAccessFailure | null>(null)
   const [packBusy, setPackBusy] = useState(false)
+  const [detailStamp, setDetailStamp] = useState<string | null>(null)
 
   const linkedGrant = caseRow?.linkedGrantId
     ? state.grants.find((g) => g.id === caseRow.linkedGrantId)
@@ -120,6 +122,17 @@ export function CaseDetailPage() {
       <p className="page-sub">
         Status: {caseRow.status} <DemoPill />
       </p>
+      <HonestyReloadControl
+        surface="case detail"
+        testId="oe-case-detail-reload"
+        honesty="Single-case re-read simulation only. Distinct from the cases list probe. Not licensed clearance."
+        onReplaced={() => setDetailStamp(new Date().toISOString())}
+      />
+      {detailStamp ? (
+        <p className="work-row-meta" data-testid="oe-case-detail-stamp">
+          Last case detail re-read: {detailStamp}
+        </p>
+      ) : null}
       <div className="panel">
         <p>Assignee: {caseRow.assignee}</p>
         <p className="work-row-meta">Updated: {caseRow.updatedAt}</p>

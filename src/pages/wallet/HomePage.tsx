@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { HonestyReloadControl } from '../../components/HonestyReloadControl'
 import { DemoPill, GrantBadge } from '../../components/StatusBadge'
 import { useDemoStore } from '../../demo/DemoStore'
 
@@ -6,6 +8,7 @@ export function HomePage() {
   const { state, setGrantStatus, markInboxRead, approveStepUpChallenge } = useDemoStore()
   const pendingGrants = state.grants.filter((g) => g.status === 'pending')
   const pendingStepUps = state.stepUpChallenges.filter((c) => c.status === 'pending')
+  const [loopbackStamp, setLoopbackStamp] = useState<string | null>(null)
 
   return (
     <>
@@ -13,6 +16,18 @@ export function HomePage() {
       <p className="page-sub">
         Inbox, grants, and DEBUG loopback step-up (Path A) <DemoPill />
       </p>
+
+      <HonestyReloadControl
+        surface="home DEBUG loopback"
+        testId="wallet-home-loopback-reload"
+        honesty="DEBUG loopback only: re-reads inbox, grants, and step-up lists in this hub. Does not grant, reject, or decide a step-up. Not Cognito, not live WebAuthn, not production mesh."
+        onReplaced={() => setLoopbackStamp(new Date().toISOString())}
+      />
+      {loopbackStamp ? (
+        <p className="work-row-meta" data-testid="wallet-home-loopback-stamp">
+          Last loopback re-read: {loopbackStamp}
+        </p>
+      ) : null}
 
       <section className="panel" style={{ marginBottom: '1rem' }} aria-labelledby="wallet-home-step-up">
         <h2 id="wallet-home-step-up">Step-up inbox (Path A)</h2>

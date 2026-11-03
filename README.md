@@ -5,11 +5,15 @@ Password-gated **GitHub Pages** demo for both LETZZ product surfaces:
 - **Wallet Subject desk** (simulated LETZZ Wallet web experience)
 - **Obliged Entity operate desk** (simulated LETZZ Platform OE)
 
-## Live site
+## Live site (static)
 
-After Pages deploy: `https://eob-ip-box.github.io/test/` (or org URL shown in repo Settings → Pages).
+**https://eob-ip-box.github.io/test/**
 
-## Demo password
+This URL stays fixed. Every push to `main` on `EOB-IP-BOX/test` rebuilds and deploys GitHub Pages (`deploy-pages.yml`), then runs Playwright smoke against that same URL.
+
+Letz File monorepo pushes do **not** auto-publish this hub. When Platform honesty desks change, update and push this repo so the partner preview stays current.
+
+## Demo password (static)
 
 **Alma**
 
@@ -71,19 +75,22 @@ Screenshots are off by default (Pages can be flaky); traces on first retry only.
 ### Wallet Subject
 
 - Welcome → Home
+- Home: DEBUG loopback re-read (inbox / grants / step-up), generation-guarded
 - Inbox mark-read
 - Grant / reject pending grants
-- Documents: category filter, inspect detail, copy hash, verify-only paste check, blocked PDF download honesty
+- Documents: hash-receipts re-read, category filter, inspect detail, copy hash, verify-only paste check, blocked PDF download honesty
 - Packages: create draft, checkbox assemble hashes, mark ready, mark shared, copy JSON manifest (`vaultBytesIncluded: false`)
-- Assistant: quick prompts + rule-based local stub (no GPT, reads demo state only)
+- Assistant: stack-health vs Concierge honesty re-reads (separate), quick prompts + rule-based local stub (no GPT)
 - Data Subject: life-store connectors, read-only grant simulation, vault-byte gate honesty
-- Settings toggles + reset demo data
+- Settings: recovery honesty re-read (gated), toggles + reset demo data
 
 ### Obliged Entity
 
 - Dashboard metrics
-- Subjects list and detail
-- Cases list, detail, status transitions
+- Subjects list and detail (detail re-read honesty)
+- Cases list, detail, status transitions (detail re-read honesty)
+- Organisations directory + open-org follow-on (not registry verification)
+- Screening jobs list, open-job detail, party fixture seed (not licensed clearance)
 - Request compose, draft, mark sent
 - Grants approve/deny (shared state with wallet)
 - **Grants pack flow (Prometheus honesty sim):** View pack on a granted row → step-up gate (`STEP_UP_DENIED`) → Wallet Subject Home → Approve (loopback) → pack preview (auto-retry when demo state syncs across tabs via `storage`, or manual Retry). **Path B:** Run WebAuthn probe on the gate → `webauthn_unavailable` or `webauthn_verify_not_wired` (never unlocks). Revoke before or after step-up → `GRANT_REVOKED` (not stale step-up denial). Pre-seeded revoked row: DEMO Elon Musk grant-4.

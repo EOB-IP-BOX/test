@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { DemoBanner } from '../components/DemoBanner'
+import { HUB_STATIC_PASSWORD, HUB_STATIC_URL } from '../demo/honestyReload'
 import { persistLocalAccount, readPersistedLocalAccount } from '../demo/roleSession'
 
 export function Chooser() {
@@ -21,6 +22,36 @@ export function Chooser() {
             </>
           ) : null}
         </p>
+
+        <div className="panel" style={{ marginBottom: '1.25rem' }} data-testid="hub-static-access">
+          <h2 style={{ marginTop: 0 }}>Static partner access</h2>
+          <p style={{ margin: '0.35rem 0' }}>
+            Live URL (unchanging):{' '}
+            <a href={HUB_STATIC_URL} data-testid="hub-static-url">
+              {HUB_STATIC_URL}
+            </a>
+          </p>
+          <p style={{ margin: '0.35rem 0' }}>
+            Demo gate password (unchanging): <code data-testid="hub-static-password">{HUB_STATIC_PASSWORD}</code>{' '}
+            (client-side SHA-256 only; not production auth).
+          </p>
+          <p className="honesty" style={{ marginBottom: 0 }}>
+            GitHub Pages redeploys this hub on every push to <code>EOB-IP-BOX/test</code> <code>main</code>.
+            Letz File monorepo pushes do not auto-publish here; sync this repo when Platform honesty
+            desks change.
+          </p>
+        </div>
+
+        <div className="panel" style={{ marginBottom: '1.25rem' }} data-testid="hub-nov-2026-sync">
+          <h2 style={{ marginTop: 0 }}>Synced with Platform honesty (Nov 2026)</h2>
+          <ul style={{ margin: '0.35rem 0 0', paddingLeft: '1.2rem' }}>
+            <li>Wallet Home / Documents / Assistant / Settings: generation-guarded DEMO re-reads</li>
+            <li>OE Organisations + Screening: list, detail, and fixture-seed re-reads (not clearance)</li>
+            <li>Guest share open + register honesty; grant pack step-up; Path B WebAuthn probe</li>
+            <li>Hash-only vault model throughout; no Cognito / mesh / byte-release claims</li>
+          </ul>
+        </div>
+
         <div className="choose-grid">
           <Link
             to="/wallet/welcome"
@@ -31,7 +62,7 @@ export function Chooser() {
             <h3>Wallet Subject desk</h3>
             <p>
               Simulated LETZZ Wallet web experience: Home, Documents, Packages, Assistant, Data
-              Subject, Settings. Hash-only vault honesty.
+              Subject, Settings. Hash-only vault honesty and DEBUG loopback re-reads.
             </p>
             <span className="badge badge-demo">Interactive DEMO</span>
           </Link>
@@ -43,8 +74,8 @@ export function Chooser() {
           >
             <h3>Obliged Entity operate desk</h3>
             <p>
-              Simulated LETZZ Platform OE desk: subjects, cases, requests, grants, search. No live
-              screening or Cognito.
+              Simulated LETZZ Platform OE desk: subjects, cases, organisations, screening, requests,
+              grants, search. No live screening provider or Cognito.
             </p>
             <span className="badge badge-demo">Interactive DEMO</span>
           </Link>

@@ -5,6 +5,8 @@ const links = [
   { to: '/oe/dashboard', label: 'Dashboard' },
   { to: '/oe/subjects', label: 'Subjects' },
   { to: '/oe/cases', label: 'Cases' },
+  { to: '/oe/organisations', label: 'Organisations' },
+  { to: '/oe/screening', label: 'Screening' },
   { to: '/oe/requests', label: 'Requests' },
   { to: '/oe/grants', label: 'Grants' },
   { to: '/oe/search', label: 'Search' },

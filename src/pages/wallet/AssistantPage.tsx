@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { HonestyReloadControl } from '../../components/HonestyReloadControl'
 import { DemoPill } from '../../components/StatusBadge'
 import { conciergeBannerCodes } from '../../demo/conciergeStatus'
 import { useDemoStore } from '../../demo/DemoStore'
@@ -31,6 +32,8 @@ const BANNER_COPY: Record<
 export function AssistantPage() {
   const { state, appendAssistant } = useDemoStore()
   const [draft, setDraft] = useState('')
+  const [stackOk, setStackOk] = useState(true)
+  const [conciergeStamp, setConciergeStamp] = useState<string | null>(null)
   const bannerCodes = conciergeBannerCodes(state.settings)
   const stubActive = state.settings.localConciergeStub
 
@@ -51,6 +54,29 @@ export function AssistantPage() {
       <p className="page-sub">
         Wallet-only assistant simulation <DemoPill />
       </p>
+
+      <HonestyReloadControl
+        surface="Local Cloud reachability"
+        testId="wallet-assistant-stack-health-reload"
+        honesty="API reachability simulation only. Does not re-read Concierge desk-status or invent a planner completion."
+        onReplaced={() => setStackOk(true)}
+      />
+      <p className="work-row-meta" data-testid="wallet-assistant-stack-health-note">
+        Connectivity: {stackOk ? 'reachable (DEMO)' : 'unknown'}
+      </p>
+
+      <HonestyReloadControl
+        surface="Concierge honesty"
+        testId="wallet-assistant-concierge-honesty-reload"
+        honesty="Wallet-only Concierge desk-status + denial probe simulation. Separate from stack health. Not a planner, not vault tool execution, not a heavy server completion. Misses stay server_unreachable / local_degraded."
+        onReplaced={() => setConciergeStamp(new Date().toISOString())}
+      />
+      {conciergeStamp ? (
+        <p className="work-row-meta" data-testid="wallet-assistant-concierge-honesty-stamp">
+          Last Concierge honesty re-read: {conciergeStamp}
+        </p>
+      ) : null}
+
       {bannerCodes.map((code) => {
         if (code === 'server_unreachable') return null
         const copy = BANNER_COPY[code]

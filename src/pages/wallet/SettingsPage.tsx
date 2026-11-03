@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { HonestyReloadControl } from '../../components/HonestyReloadControl'
 import { DemoPill } from '../../components/StatusBadge'
 import { useDemoStore } from '../../demo/DemoStore'
 import type { DemoState } from '../../demo/types'
@@ -12,6 +14,7 @@ const SETTING_LABELS: Record<keyof DemoState['settings'], string> = {
 
 export function SettingsPage() {
   const { state, toggleSetting, resetDemo } = useDemoStore()
+  const [recoveryStamp, setRecoveryStamp] = useState<string | null>(null)
 
   const keys = Object.keys(state.settings) as (keyof typeof state.settings)[]
 
@@ -21,6 +24,19 @@ export function SettingsPage() {
       <p className="page-sub">
         DEBUG and demo toggles <DemoPill />
       </p>
+
+      <HonestyReloadControl
+        surface="recovery honesty"
+        testId="wallet-settings-recovery-honesty-reload"
+        honesty="Device-key recovery status and send probe simulation only. Separate from Local Cloud reachability. No Cognito restore, no live WebAuthn, no completed same-key recovery on this Pages hub."
+        onReplaced={() => setRecoveryStamp(new Date().toISOString())}
+      />
+      {recoveryStamp ? (
+        <p className="work-row-meta" data-testid="wallet-settings-recovery-honesty-stamp">
+          Last recovery honesty re-read: {recoveryStamp} · gated (not restored)
+        </p>
+      ) : null}
+
       <div className="panel" data-testid="wallet-settings-panel">
         <h2>Concierge</h2>
         <p className="honesty" style={{ marginTop: 0 }}>
