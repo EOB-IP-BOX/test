@@ -4,6 +4,7 @@ import { DemoStoreProvider } from './demo/DemoStore'
 import { OEShell } from './layouts/OEShell'
 import { WalletShell } from './layouts/WalletShell'
 import { Chooser } from './pages/Chooser'
+import { DocsLibrary } from './pages/DocsLibrary'
 import { PasswordGate } from './pages/PasswordGate'
 import { CaseDetailPage } from './pages/oe/CaseDetailPage'
 import { CasesPage } from './pages/oe/CasesPage'
@@ -30,6 +31,7 @@ function AuthedRoutes() {
     <RequireAuth>
       <Routes>
         <Route path="/choose" element={<Chooser />} />
+        <Route path="/docs" element={<DocsLibrary />} />
         <Route path="/guest/:token" element={<GuestShareOpenPage />} />
         <Route path="/register" element={<GuestShareRegisterPage />} />
         <Route path="/wallet" element={<WalletShell />}>

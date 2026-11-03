@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>How LETZZ Software Works - Partner Documentation</title>
+    <link rel="stylesheet" href="./docs.css" />
+    <script src="./gate-check.js"></script>
+  </head>
+  <body>
+    <header class="doc-top">
+      <div class="doc-top-inner">
+        <a class="brand-lockup" href="../#/docs">
+          <img class="brand-mark" src="./assets/letzz-mark-crimson.jpg" alt="" width="36" height="36" />
+          <span class="brand-text">
+            <strong>LETZZ</strong>
+            <span>Partner documentation</span>
+          </span>
+        </a>
+        <nav class="top-nav" aria-label="Documentation">
+          <a href="../#/docs">Library</a>
+          <a href="./software.html" aria-current="page">Software</a>
+          <a href="./business.html">Business</a>
+          <a href="../#/choose">Interactive demos</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-eyebrow">Product documentation · Software</div>
+      <h1>How the software works</h1>
+      <p class="hero-lead">
+        A clear map of LETZZ Wallet and LETZZ Platform: who each product serves, how documents move
+        with consent, and which claims this demo may and may not make. Written for both non-technical
+        readers and engineering partners.
+      </p>
+      <div class="hero-meta">
+        <span class="chip chip-accent">Hash-first document model</span>
+        <span class="chip">Two product apps</span>
+        <span class="chip">Prometheus honesty</span>
+        <span class="chip">Not a certification claim</span>
+      </div>
+    </section>
+
+    <div class="layout">
+      <aside class="toc" aria-label="On this page">
+        <h2>On this page</h2>
+        <ol id="toc-list">
+          <li><a href="#audience">Choose your reading path</a></li>
+          <li><a href="#picture">The big picture</a></li>
+          <li><a href="#states">Five distinct states</a></li>
+          <li><a href="#wallet">Wallet capabilities</a></li>
+          <li><a href="#platform">Platform capabilities</a></li>
+          <li><a href="#security">Trust and security meaning</a></li>
+          <li><a href="#builders">For builders</a></li>
+          <li><a href="#honesty">Honesty boundaries</a></li>
+        </ol>
+      </aside>
+
+      <main>
+        <div class="audience-switch" role="group" aria-label="Reading path" id="audience">
+          <button type="button" id="btn-everyone" aria-pressed="true">For everyone</button>
+          <button type="button" id="btn-builders" aria-pressed="false">For builders</button>
+        </div>
+
+        <div id="track-everyone" class="track is-active" data-track="everyone">
+          <article class="panel" id="picture">
+            <h2>The big picture</h2>
+            <p>
+              LETZZ is a family of two product applications that help a person keep sensitive life
+              documents under their control, and help regulated organisations request only what they
+              need - with a clear audit trail of consent.
+            </p>
+            <ul>
+              <li>
+                <strong>LETZZ Wallet</strong> is for the individual (the data subject). On phone it
+                is the vault and biometric release surface. On web it is a Wallet Subject desk for
+                requests, hashes, packages, and assistance.
+              </li>
+              <li>
+                <strong>LETZZ Platform</strong> is for obliged entities (banks, fintechs, and similar
+                organisations that must run KYC and AML checks). Staff work cases, organisations,
+                screening queues, document requests, and grants.
+              </li>
+            </ul>
+            <p>
+              Platform Owner monitoring exists as infrastructure for operators. It is not offered as
+              a third peer product in this partner hub.
+            </p>
+
+            <figure class="viz" aria-label="Product family diagram">
+              <svg viewBox="0 0 760 280" role="img" aria-labelledby="viz1-title viz1-desc">
+                <title id="viz1-title">Person, Wallet, Platform, and Obliged Entity</title>
+                <desc id="viz1-desc">
+                  Four connected boxes showing a person using LETZZ Wallet, which exchanges hash
+                  receipts and grants with LETZZ Platform used by obliged-entity staff.
+                </desc>
+                <rect x="24" y="86" width="150" height="88" rx="14" fill="#ffffff" stroke="#c7c7cc" />
+                <text x="99" y="124" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="14" font-weight="600" fill="#1a1a1c">Person</text>
+                <text x="99" y="146" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="#6e6e73">Data subject</text>
+
+                <path d="M174 130 H214" stroke="#8c1e2d" stroke-width="2" marker-end="url(#arrow)" />
+
+                <rect x="214" y="70" width="170" height="120" rx="14" fill="#ffffff" stroke="#8c1e2d" stroke-width="1.5" />
+                <text x="299" y="108" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="14" font-weight="600" fill="#8c1e2d">LETZZ Wallet</text>
+                <text x="299" y="130" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="#6e6e73">Vault on device</text>
+                <text x="299" y="148" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="#6e6e73">Face check + device key</text>
+                <text x="299" y="166" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="#6e6e73">Concierge · Data Subject</text>
+
+                <path d="M384 130 H424" stroke="#3d6b99" stroke-width="2" marker-end="url(#arrowB)" />
+                <text x="404" y="118" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="10" fill="#3d6b99">hashes · grants</text>
+
+                <rect x="424" y="70" width="170" height="120" rx="14" fill="#ffffff" stroke="#3d6b99" stroke-width="1.5" />
+                <text x="509" y="108" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="14" font-weight="600" fill="#3d6b99">LETZZ Platform</text>
+                <text x="509" y="130" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="#6e6e73">Cases · requests</text>
+                <text x="509" y="148" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="#6e6e73">Grants · screening</text>
+                <text x="509" y="166" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="#6e6e73">Role-tier clearances</text>
+
+                <path d="M594 130 H634" stroke="#6e6e73" stroke-width="2" marker-end="url(#arrowG)" />
+
+                <rect x="634" y="86" width="102" height="88" rx="14" fill="#ffffff" stroke="#c7c7cc" />
+                <text x="685" y="124" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="13" font-weight="600" fill="#1a1a1c">OE staff</text>
+                <text x="685" y="146" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="#6e6e73">Bank / EMI / …</text>
+
+                <defs>
+                  <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                    <path d="M0,0 L6,3 L0,6 Z" fill="#8c1e2d" />
+                  </marker>
+                  <marker id="arrowB" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                    <path d="M0,0 L6,3 L0,6 Z" fill="#3d6b99" />
+                  </marker>
+                  <marker id="arrowG" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                    <path d="M0,0 L6,3 L0,6 Z" fill="#6e6e73" />
+                  </marker>
+                </defs>
+              </svg>
+              <figcaption>
+                Figure 1. Two product apps only. The person controls release from the Wallet; Platform
+                staff operate within organisation tiers and clearance ceilings.
+              </figcaption>
+            </figure>
+          </article>
+
+          <article class="panel" id="states">
+            <h2>Five distinct states (never mixed)</h2>
+            <p>
+              Everyday language often collapses “sent,” “approved,” and “cleared” into one idea.
+              LETZZ keeps five meanings separate so auditors, staff, and individuals can trust what
+              each screen is saying.
+            </p>
+            <figure class="viz" aria-label="State sequence">
+              <svg viewBox="0 0 760 150" role="img">
+                <title>Delivery, consent, grant, verification, clearance</title>
+                <g font-family="IBM Plex Sans, sans-serif">
+                  <rect x="16" y="40" width="120" height="64" rx="12" fill="#fff" stroke="#c7c7cc" />
+                  <text x="76" y="68" text-anchor="middle" font-size="12" font-weight="600" fill="#1a1a1c">Delivery</text>
+                  <text x="76" y="86" text-anchor="middle" font-size="10" fill="#6e6e73">Arrived / logged</text>
+                  <path d="M136 72 H156" stroke="#c7c7cc" stroke-width="2" />
+                  <rect x="156" y="40" width="120" height="64" rx="12" fill="#fff" stroke="#c7c7cc" />
+                  <text x="216" y="68" text-anchor="middle" font-size="12" font-weight="600" fill="#1a1a1c">Consent</text>
+                  <text x="216" y="86" text-anchor="middle" font-size="10" fill="#6e6e73">Person agrees</text>
+                  <path d="M276 72 H296" stroke="#c7c7cc" stroke-width="2" />
+                  <rect x="296" y="40" width="120" height="64" rx="12" fill="#fff" stroke="#8c1e2d" />
+                  <text x="356" y="68" text-anchor="middle" font-size="12" font-weight="600" fill="#8c1e2d">Grant</text>
+                  <text x="356" y="86" text-anchor="middle" font-size="10" fill="#6e6e73">Scoped access</text>
+                  <path d="M416 72 H436" stroke="#c7c7cc" stroke-width="2" />
+                  <rect x="436" y="40" width="130" height="64" rx="12" fill="#fff" stroke="#c7c7cc" />
+                  <text x="501" y="68" text-anchor="middle" font-size="12" font-weight="600" fill="#1a1a1c">Verification</text>
+                  <text x="501" y="86" text-anchor="middle" font-size="10" fill="#6e6e73">Checks done</text>
+                  <path d="M566 72 H586" stroke="#c7c7cc" stroke-width="2" />
+                  <rect x="586" y="40" width="150" height="64" rx="12" fill="#fff" stroke="#3d6b99" />
+                  <text x="661" y="68" text-anchor="middle" font-size="12" font-weight="600" fill="#3d6b99">Clearance</text>
+                  <text x="661" y="86" text-anchor="middle" font-size="10" fill="#6e6e73">Staff may act</text>
+                </g>
+              </svg>
+              <figcaption>
+                Figure 2. Order is illustrative. A grant without clearance is still a grant. Clearance
+                is never implied by delivery alone.
+              </figcaption>
+            </figure>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>State</th>
+                    <th>Plain meaning</th>
+                    <th>Common mistake to avoid</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Delivery</td>
+                    <td>A request or package reached the other side.</td>
+                    <td>Treating delivery as approval.</td>
+                  </tr>
+                  <tr>
+                    <td>Consent</td>
+                    <td>The person agreed to a scope of sharing.</td>
+                    <td>Assuming consent lasts forever for every field.</td>
+                  </tr>
+                  <tr>
+                    <td>Grant</td>
+                    <td>Access was issued for a defined pack or hash set.</td>
+                    <td>Equating grant with download of original bytes.</td>
+                  </tr>
+                  <tr>
+                    <td>Verification</td>
+                    <td>Integrity or identity checks completed as designed.</td>
+                    <td>Calling verification a legal certification.</td>
+                  </tr>
+                  <tr>
+                    <td>Clearance</td>
+                    <td>Staff tier may view, download, or approve under policy.</td>
+                    <td>Letting any staff member see every document.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="panel" id="wallet">
+            <h2>What the Wallet does</h2>
+            <p>
+              The Wallet is the individual’s document concierge and control surface. Value compounds
+              as the person stores more of their life materials and answers organisation requests
+              without losing ownership of the vault.
+            </p>
+            <div class="grid-2">
+              <div class="stat-card">
+                <strong>Documents and packages</strong>
+                <span>Catalogue hashes, group stacks, prepare response packs for requests.</span>
+              </div>
+              <div class="stat-card">
+                <strong>Home and inbox</strong>
+                <span>See pending organisation requests; grant or decline with a clear outcome.</span>
+              </div>
+              <div class="stat-card">
+                <strong>AI Concierge (Wallet only)</strong>
+                <span>Local light help free; heavier analysis is a paywalled server path when entitled. Never an OE product.</span>
+              </div>
+              <div class="stat-card">
+                <strong>Data Subject module</strong>
+                <span>Locally indexed life store with read-only source grants the person controls.</span>
+              </div>
+              <div class="stat-card">
+                <strong>Guest one-time share</strong>
+                <span>Share selected items with someone who does not yet have the app, with a registration invitation.</span>
+              </div>
+              <div class="stat-card">
+                <strong>Device-bound release</strong>
+                <span>Outbound responses are meant to pass a face check tied to one device key on phone.</span>
+              </div>
+            </div>
+            <div class="callout">
+              <strong>Hash-first honesty.</strong> In the current product model, Platform receives
+              cryptographic hashes and structured grants by default. Original document bytes stay on
+              the person’s device unless a separate, approved product decision authorises a selected
+              one-time release (for example guest share).
+            </div>
+          </article>
+
+          <article class="panel" id="platform">
+            <h2>What the Platform does</h2>
+            <p>
+              Obliged-entity staff use one operate desk to run identity and compliance work without
+              turning every colleague into a super-administrator.
+            </p>
+            <ol class="steps">
+              <li>
+                <strong>Subjects and cases.</strong> Open work items for people your organisation
+                must know, with status that stays honest when a provider is offline.
+              </li>
+              <li>
+                <strong>Organisations and screening.</strong> Maintain counterparties and screening
+                queues. This demo does not claim a live screening vendor.
+              </li>
+              <li>
+                <strong>Document requests.</strong> Compose staggered requests (hard cap 100 per
+                person per organisation), with expiry that auto-declines and dual-side request logs.
+              </li>
+              <li>
+                <strong>Grants and search.</strong> Review packs the person granted; search within
+                clearance. Mid-flight staff tier changes snap clearance immediately.
+              </li>
+            </ol>
+            <h3>Permission tiers (mandatory)</h3>
+            <p>
+              Every organisation starts with an Admin tier and ships default packs for likely EU
+              AML and KYC entity types (bank, fintech or EMI, crypto-asset service provider, real
+              estate, law firm, gambling, telecom). Admin may define custom tiers in a controlled
+              style similar to Google Admin: dramatic differences in views, clearances, and write
+              abilities.
+            </p>
+          </article>
+
+          <article class="panel" id="security">
+            <h2>Trust and security meaning</h2>
+            <p>
+              Security language in LETZZ is deliberate and calm. The product aims for bank-style
+              seriousness without theatrical claims.
+            </p>
+            <ul>
+              <li>One device key gates Wallet actions on the phone; recovery restores the same key.</li>
+              <li>Daily unlock prefers Face ID (or available biometry); outbound release refreshes proof of presence.</li>
+              <li>
+                Web authentication may use the phone as authenticator (Path A) or a web authenticator
+                when available (Path B), with honest unavailable states.
+              </li>
+              <li>Local monitoring watches suspicious unlock and recovery patterns without exporting vault contents for analytics.</li>
+            </ul>
+            <div class="callout callout-warn">
+              <strong>What this partner hub is.</strong> An Alma-gated GitHub Pages simulator with
+              synthetic data. It demonstrates UX honesty and flows. It is not production hosting,
+              not a live Cognito or screening integration, and not a substitute for regulated
+              deployment evidence.
+            </div>
+          </article>
+        </div>
+
+        <div id="track-builders" class="track" data-track="builders">
+          <article class="panel" id="builders">
+            <h2>Architecture for builders</h2>
+            <p>
+              Shipping spine today: Letz File monorepo with native Wallet (<span class="mono">letzwallet/</span>),
+              Obliged Entity web (<span class="mono">platform/web-oe/</span>), shared API
+              (<span class="mono">platform/api/</span>), one database process for platform state, and
+              versioned HTTP under <span class="mono">/api/v1</span>. Platform Owner web is
+              infrastructure, not a peer product.
+            </p>
+            <figure class="viz" aria-label="Layer diagram">
+              <svg viewBox="0 0 760 320" role="img">
+                <title>Client layers over shared API and data</title>
+                <rect x="40" y="24" width="300" height="70" rx="12" fill="#fff" stroke="#8c1e2d" />
+                <text x="190" y="54" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="14" font-weight="600" fill="#8c1e2d">LETZZ Wallet (iOS)</text>
+                <text x="190" y="74" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="#6e6e73">Keychain · Face ID · Concierge · vault bytes</text>
+
+                <rect x="420" y="24" width="300" height="70" rx="12" fill="#fff" stroke="#3d6b99" />
+                <text x="570" y="54" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="14" font-weight="600" fill="#3d6b99">web-oe dual desk</text>
+                <text x="570" y="74" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="#6e6e73">Wallet Subject · OE staff · SurfaceGate</text>
+
+                <path d="M190 94 V130" stroke="#c7c7cc" stroke-width="2" />
+                <path d="M570 94 V130" stroke="#c7c7cc" stroke-width="2" />
+                <path d="M190 130 H570" stroke="#c7c7cc" stroke-width="2" />
+
+                <rect x="160" y="130" width="440" height="70" rx="12" fill="#fff" stroke="#1a1a1c" />
+                <text x="380" y="160" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="14" font-weight="600" fill="#1a1a1c">platform/api · /api/v1</text>
+                <text x="380" y="180" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="#6e6e73">Auth · tenants · requests · grants · metrics</text>
+
+                <path d="M380 200 V236" stroke="#c7c7cc" stroke-width="2" />
+
+                <rect x="220" y="236" width="320" height="60" rx="12" fill="#f0f0f2" stroke="#c7c7cc" />
+                <text x="380" y="272" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="13" font-weight="600" fill="#2f2f31">One platform database process</text>
+              </svg>
+              <figcaption>
+                Figure 3. Clients converge on one API contract. Independent frontend deploys use API
+                version headers so they do not break each other.
+              </figcaption>
+            </figure>
+
+            <h3>Implementation invariants</h3>
+            <ul>
+              <li><strong>Prometheus Protocol:</strong> evidence-led status; honest gated or degraded states; no false completion.</li>
+              <li><strong>No fake integrations:</strong> ship real behaviour, a clean unused abstraction, or an explicit unfinished state.</li>
+              <li><strong>No certification theatre:</strong> do not claim AML6, eIDAS/EUDI, or ILNAS/QTSP readiness from UI copy alone.</li>
+              <li><strong>CSP baseline</strong> on Platform web shells; production must narrow <span class="mono">connect-src</span> to the real API origin.</li>
+              <li><strong>Staged release:</strong> OE first with observe gates, then Wallet; fail closed or gate honestly when samples are insufficient.</li>
+            </ul>
+
+            <h3>Request lifecycle (dual log)</h3>
+            <figure class="viz">
+              <svg viewBox="0 0 760 200" role="img">
+                <title>Request statuses</title>
+                <g font-family="IBM Plex Sans, sans-serif" font-size="12">
+                  <rect x="20" y="70" width="100" height="48" rx="10" fill="#fff" stroke="#c7c7cc" /><text x="70" y="98" text-anchor="middle" fill="#1a1a1c">pending</text>
+                  <path d="M120 94 H150" stroke="#c7c7cc" stroke-width="2" />
+                  <rect x="150" y="20" width="110" height="48" rx="10" fill="#dcfce7" stroke="#166534" /><text x="205" y="48" text-anchor="middle" fill="#166534">approved</text>
+                  <rect x="150" y="120" width="110" height="48" rx="10" fill="#fee2e2" stroke="#991b1b" /><text x="205" y="148" text-anchor="middle" fill="#991b1b">declined</text>
+                  <path d="M260 44 H300" stroke="#c7c7cc" stroke-width="2" />
+                  <path d="M260 144 H300" stroke="#c7c7cc" stroke-width="2" />
+                  <rect x="300" y="70" width="120" height="48" rx="10" fill="#fff" stroke="#3d6b99" /><text x="360" y="98" text-anchor="middle" fill="#3d6b99">archived log</text>
+                  <rect x="460" y="20" width="120" height="48" rx="10" fill="#fef3c7" stroke="#92400e" /><text x="520" y="48" text-anchor="middle" fill="#92400e">expired</text>
+                  <rect x="460" y="120" width="120" height="48" rx="10" fill="#e5e7eb" stroke="#374151" /><text x="520" y="148" text-anchor="middle" fill="#374151">withdrawn</text>
+                  <path d="M420 94 H460" stroke="#c7c7cc" stroke-width="2" />
+                  <path d="M520 68 V120" stroke="#c7c7cc" stroke-width="1.5" stroke-dasharray="4 3" />
+                  <text x="640" y="100" font-size="11" fill="#6e6e73">Both apps keep
+filterable history</text>
+                </g>
+              </svg>
+              <figcaption>
+                Figure 4. Expiry auto-declines and notifies the organisation. Withdraw before response
+                removes the active item but keeps the log row.
+              </figcaption>
+            </figure>
+
+            <h3>Concierge hybrid runtime</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Path</th>
+                    <th>Budget</th>
+                    <th>Honesty when blocked</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Local free</td>
+                    <td>Quantized 3–8B, 4-bit, A20-class Neural Engine class tasks + local retrieval</td>
+                    <td>Degrade with explicit codes; never invent completion</td>
+                  </tr>
+                  <tr>
+                    <td>Server paywalled</td>
+                    <td>GPT/Claude-class heavy analysis after entitlement check</td>
+                    <td><span class="mono">server_unreachable</span> / unpaid → local or rule-based help</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>This hub repository</h3>
+            <p>
+              <span class="mono">EOB-IP-BOX/test</span> is a static simulator. Pushes to
+              <span class="mono">main</span> rebuild GitHub Pages and run Playwright smoke against
+              <span class="mono">https://eob-ip-box.github.io/test/</span>. Letz File monorepo pushes
+              do not auto-publish here; sync intentionally when Platform honesty desks change.
+            </p>
+          </article>
+        </div>
+
+        <article class="panel" id="honesty">
+          <h2>Honesty boundaries (shared)</h2>
+          <ul>
+            <li>No claim of live AML6, eIDAS/EUDI, or ILNAS/QTSP certification from this documentation or demo.</li>
+            <li>No claim of production Cognito, mesh sync, or unrestricted vault byte export unless an approved decision says otherwise.</li>
+            <li>Demo password <span class="kbd">Alma</span> is client-side SHA-256 only - partner convenience, not production auth.</li>
+            <li>Language stays professional and suitable for institutional review.</li>
+          </ul>
+          <p>
+            Continue with
+            <a href="./business.html">business documentation</a>
+            or return to the
+            <a href="../#/docs">documentation library</a>
+            and interactive desks.
+          </p>
+        </article>
+      </main>
+    </div>
+
+    <footer class="footer">
+      <p>
+        © EOB Capital · LETZZ partner documentation · Visual identity: UBI Crimson, Notify Blue,
+        Digital Gray, white ·
+        <a href="../#/choose">Back to chooser</a>
+      </p>
+    </footer>
+
+    <script>
+      ;(function () {
+        if (document.documentElement.getAttribute('data-docs-locked') === '1') return
+        var everyone = document.getElementById('track-everyone')
+        var builders = document.getElementById('track-builders')
+        var btnE = document.getElementById('btn-everyone')
+        var btnB = document.getElementById('btn-builders')
+        function show(which) {
+          var isBuilders = which === 'builders'
+          everyone.classList.toggle('is-active', !isBuilders)
+          builders.classList.toggle('is-active', isBuilders)
+          btnE.setAttribute('aria-pressed', String(!isBuilders))
+          btnB.setAttribute('aria-pressed', String(isBuilders))
+          try {
+            history.replaceState(null, '', isBuilders ? '#builders' : '#audience')
+          } catch (_) {}
+        }
+        btnE.addEventListener('click', function () {
+          show('everyone')
+        })
+        btnB.addEventListener('click', function () {
+          show('builders')
+        })
+        if (location.hash === '#builders') show('builders')
+      })()
+    </script>
+  </body>
+</html>

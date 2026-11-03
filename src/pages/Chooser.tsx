@@ -12,8 +12,8 @@ export function Chooser() {
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '2rem 1.5rem' }}>
         <h1 className="page-title">Choose product surface</h1>
         <p className="page-sub">
-          Two peer apps only: Wallet Subject desk and Obliged Entity operate desk (LETZZ Platform).
-          Platform Owner ops monitoring is out of scope for this hub.
+          Two interactive desks (Wallet Subject and Obliged Entity) plus partner business
+          documentation. Platform Owner ops monitoring remains out of scope for this hub.
           {lastRole ? (
             <>
               {' '}
@@ -78,6 +78,19 @@ export function Chooser() {
               grants, search. No live screening provider or Cognito.
             </p>
             <span className="badge badge-demo">Interactive DEMO</span>
+          </Link>
+          <Link
+            to="/docs"
+            className="panel choose-card"
+            style={{ textDecoration: 'none', color: 'inherit' }}
+            data-testid="chooser-docs"
+          >
+            <h3>Business documentation</h3>
+            <p>
+              Professional HTML briefs: how the software works (everyone and builders) and how the
+              business works (customers, revenue design, operating model). Institutional tone.
+            </p>
+            <span className="badge badge-demo">HTML BRIEFS</span>
           </Link>
         </div>
       </div>

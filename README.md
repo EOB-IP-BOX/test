@@ -1,9 +1,10 @@
 # LETZZ Test Hub
 
-Password-gated **GitHub Pages** demo for both LETZZ product surfaces:
+Password-gated **GitHub Pages** demo for LETZZ product surfaces and partner docs:
 
 - **Wallet Subject desk** (simulated LETZZ Wallet web experience)
 - **Obliged Entity operate desk** (simulated LETZZ Platform OE)
+- **Business documentation** (`#/docs` → `docs/software.html`, `docs/business.html`)
 
 ## Live site (static)
 
